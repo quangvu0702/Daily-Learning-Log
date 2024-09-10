@@ -33,4 +33,19 @@
 - Learning supposes to be hard.
 - What children should learn: Math, physics, CS.
 
+### [Hands-On LLM Fine-Tuning](https://www.wandb.courses/courses/take/training-fine-tuning-LLMs/lessons/44579742-hands-on-llm-fine-tuning)
+- The big picture: 
+  - Finetuning data
+    - Download data, convert to usable format, mixed and sampled.
+    - Data loader for training and evaluation.
+  - Finetuning repository and scripts.
+    - Load model, load data, training, checkpoint, tracking.
+    - Hackable: easy to modify, add features.
+    - [TODO]
+      - [NeurIPS LLM Efficiency Challenge](https://github.com/llm-efficiency-challenge/neurips_llm_efficiency_challenge)
+      - https://colab.research.google.com/github/wandb/edu/blob/main/llm-training-course/colab/finetuning.ipynb 
+  - Finetuning model. (llamma3, Falcon, OpenLLaMa, ...)
+  - LB eval on Subset of HELM benchmark. * Need to think about the evaluation carefully. *
+
+
 ### [Neural and Non-Neural AI, Reasoning, Transformers, and LSTMs](https://www.youtube.com/watch?v=DP454c1K_vQ&t=68s)
