@@ -47,5 +47,9 @@
   - Finetuning model. (llamma3, Falcon, OpenLLaMa, ...)
   - LB eval on Subset of HELM benchmark. * Need to think about the evaluation carefully. *
 
+## Sep 12, 2024:
+- [Build a Question/Answering system over SQL data](QA_SQL/README.md) 
 
+
+## TODO
 ### [Neural and Non-Neural AI, Reasoning, Transformers, and LSTMs](https://www.youtube.com/watch?v=DP454c1K_vQ&t=68s)
