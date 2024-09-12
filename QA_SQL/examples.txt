@@ -1,0 +1,36 @@
+**Example Questions and Queries (`examples.txt`):**
+
+1.**Question:** "get all running campaigns"
+  **Output SQL Query:**
+     ```SELECT 
+        campaign.id AS campaign_id, 
+        campaign.name AS campaign_name, 
+        adset.start_date, 
+        adset.end_date, 
+        adset.status
+        FROM 
+            sponsor_adset AS adset
+        INNER JOIN 
+            sponsor_campaign AS campaign 
+        ON 
+            adset.campaign_id = campaign.id
+        WHERE 
+            adset.status = 'DELIVERING';
+     ```
+
+2.**Question:** "What is the total sales amount for all orders placed in 2023?"
+  **Output SQL Query:**
+     ```sql
+     SELECT SUM(total_amount) 
+     FROM orders 
+     WHERE YEAR(order_date) = 2023;
+     ```
+
+3.**Question:** "Which customers placed orders in January 2024?"
+  **Output SQL Query:**
+     ```sql
+     SELECT c.first_name, c.last_name, c.email 
+     FROM customers c
+     JOIN orders o ON c.customer_id = o.customer_id
+     WHERE o.order_date BETWEEN '2024-01-01' AND '2024-01-31';
+     ```
