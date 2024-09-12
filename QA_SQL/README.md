@@ -75,7 +75,7 @@ When we have most common questions, our system will be able to answer 99% of que
 
 This development cycle ensures a systematic approach to building and improving the Q&A system over SQL data, with a focus on comprehensive documentation and continuous refinement.
 
-![alt text](image-1.png)
+![alt text](image-2.png)
 
 
 ## Warning:
