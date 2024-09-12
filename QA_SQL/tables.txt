@@ -1,0 +1,1797 @@
+# Database Tables
+
+## The tables in this project:
+
+1. admin_sso_assignment
+2. auth_group
+3. auth_group_permissions
+4. auth_permission
+5. auth_user
+    - Stores user account information
+    - Structure based on init_dafiti_2020_12_08.sql:
+        CREATE TABLE `auth_user` (
+          `id` int(11) NOT NULL AUTO_INCREMENT,
+          `password` varchar(128) NOT NULL,
+          `last_login` datetime(6) DEFAULT NULL,
+          `is_superuser` tinyint(1) NOT NULL,
+          `username` varchar(150) NOT NULL,
+          `first_name` varchar(30) NOT NULL,
+          `last_name` varchar(150) NOT NULL,
+          `email` varchar(254) NOT NULL,
+          `is_staff` tinyint(1) NOT NULL,
+          `is_active` tinyint(1) NOT NULL,
+          `date_joined` datetime(6) NOT NULL,
+          PRIMARY KEY (`id`),
+          UNIQUE KEY `username` (`username`)
+        )
+    - Fields:
+        - id: Auto-incrementing primary key
+        - password: Hashed password for the user
+        - last_login: Timestamp of the user's last login
+        - is_superuser: Boolean indicating if the user has all permissions
+        - username: Unique username for the user
+        - first_name: User's first name
+        - last_name: User's last name
+        - email: User's email address
+        - is_staff: Boolean indicating if the user can access the admin site
+        - is_active: Boolean indicating if the user account is active
+        - date_joined: Timestamp of when the user account was created
+6. auth_user_groups
+7. auth_user_user_permissions
+8. billing_billingentity
+9. billing_billingentitytaxsetting
+10. billing_creditcard
+11. billing_creditnote
+12. billing_creditnotenumbercounter
+13. billing_externalauditresult
+14. billing_historicalbillingentity
+15. billing_historicalbillingentitytaxsetting
+15. billing_historicalcreditcard
+16. billing_historicalincomesource
+17. billing_historicalincomesourcetransaction
+18. billing_historicalpromotion
+19. billing_historicaltopuprequest
+19. billing_historicaltransaction
+20. billing_historicalvouchercode
+21. billing_historicalvoucherredeem
+22. billing_historicalwallet
+23. billing_incomesource
+23. billing_incomesourcetransaction
+24. billing_invoice
+25. billing_invoicenumbercounter
+26. billing_promotion
+27. billing_promotioncompany
+28. billing_receipt
+29. billing_stripepayment
+30. billing_stripetotalpaid
+31. billing_stripewebhookevent
+32. billing_topuprequest
+33. billing_transaction
+34. billing_vouchercode
+35. billing_vouchercode_eligible_companies
+36. billing_voucherredeem
+37. billing_wallet
+38. campaign_applieddiscount
+    - Stores information about discounts applied to campaigns
+    - Structure based on init_dafiti_2020_12_08.sql:
+        CREATE TABLE `campaign_applieddiscount` (
+          `id` int(11) NOT NULL AUTO_INCREMENT,
+          `date_created` datetime(6) NOT NULL,
+          `date_updated` datetime(6) NOT NULL,
+          `amount` decimal(10,2) NOT NULL,
+          `campaign_id` char(32) NOT NULL,
+          `discount_id` int(11) NOT NULL,
+          PRIMARY KEY (`id`),
+          KEY `campaign_applieddiscount_campaign_id_e7a9a5c4_fk` (`campaign_id`),
+          KEY `campaign_applieddiscount_discount_id_c9a5f9c7_fk` (`discount_id`),
+          CONSTRAINT `campaign_applieddiscount_campaign_id_e7a9a5c4_fk` FOREIGN KEY (`campaign_id`) REFERENCES `campaign_campaign` (`id`),
+          CONSTRAINT `campaign_applieddiscount_discount_id_c9a5f9c7_fk` FOREIGN KEY (`discount_id`) REFERENCES `campaign_campaigndiscount` (`id`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+    - Fields explanation:
+        - id: Unique identifier for the applied discount (auto-incrementing integer)
+        - date_created, date_updated: Timestamps for creation and last update
+        - amount: The amount of the discount applied (decimal(10,2))
+        - campaign_id: Foreign key to campaign_campaign table, identifies the campaign the discount is applied to
+        - discount_id: Foreign key to campaign_campaigndiscount table, identifies the specific discount being applied
+    - Has relationships to campaign_campaign and campaign_campaigndiscount tables
+39. campaign_campaign
+    - Stores information about advertising campaigns
+    - Structure based on init_dafiti_2020_12_08.sql:
+        CREATE TABLE `campaign_campaign` (
+          `id` char(32) NOT NULL,
+          `date_created` datetime(6) NOT NULL,
+          `date_updated` datetime(6) NOT NULL,
+          `name` varchar(254) NOT NULL,
+          `start_date` date NOT NULL,
+          `end_date` date NOT NULL,
+          `status` varchar(20) NOT NULL,
+          `budget` decimal(10,2) NOT NULL,
+          `currency` varchar(20) NOT NULL,
+          `total` decimal(10,2) NOT NULL,
+          `discount` decimal(10,2) NOT NULL,
+          `payment_method` varchar(20) NOT NULL,
+          `account_id` char(32) NOT NULL,
+          `company_id` char(32) NOT NULL,
+          `package_id` int(11) NOT NULL,
+          `segment_id` int(11) NOT NULL,
+          `venture_id` int(11) NOT NULL,
+          PRIMARY KEY (`id`),
+          KEY `campaign_campaign_account_id_e0e7a3d9_fk_users_account_id` (`account_id`),
+          KEY `campaign_campaign_company_id_a21f516e_fk_users_company_id` (`company_id`),
+          KEY `campaign_campaign_package_id_e02f7cbb_fk_campaign_package_id` (`package_id`),
+          KEY `campaign_campaign_segment_id_b364835f_fk_campaign_segment_id` (`segment_id`),
+          KEY `campaign_campaign_venture_id_e4b5d54a_fk_campaign_venture_id` (`venture_id`),
+          CONSTRAINT [foreign key constraints]
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+    - Fields explanation:
+        - id: Unique identifier for the campaign (char(32))
+        - date_created, date_updated: Timestamps for creation and last update
+        - name: Name of the campaign (varchar(254))
+        - start_date, end_date: Campaign duration dates
+        - status: Current status of the campaign (varchar(20))
+        - budget: Total budget allocated for the campaign (decimal(10,2))
+        - currency: Currency used for the campaign's financial transactions (varchar(20))
+        - total: Total cost of the campaign (decimal(10,2))
+        - discount: Any discounts applied to the campaign (decimal(10,2))
+        - payment_method: Method of payment for the campaign (varchar(20))
+        - account_id: Foreign key to users_account table
+        - company_id: Foreign key to users_company table
+        - package_id: Foreign key to campaign_package table
+        - segment_id: Foreign key to campaign_segment table
+        - venture_id: Foreign key to campaign_venture table
+    - Has relationships to users_account, users_company, campaign_package, campaign_segment, and campaign_venture tables
+
+40. campaign_campaign_items
+    - Stores information about items in a campaign
+    - Structure based on init_dafiti_2020_12_08.sql:
+        CREATE TABLE `campaign_campaign_items` (
+          `id` int(11) NOT NULL AUTO_INCREMENT,
+          `campaign_id` char(32) NOT NULL,
+          `packagepricing_id` int(11) NOT NULL,
+          PRIMARY KEY (`id`),
+          UNIQUE KEY `campaign_campaign_items_campaign_id_packageprici_0dd80b9f_uniq` (`campaign_id`,`packagepricing_id`),
+          KEY `campaign_campaign_it_packagepricing_id_e244ce5b_fk_campaign_` (`packagepricing_id`),
+          CONSTRAINT `campaign_campaign_it_campaign_id_94be534e_fk_campaign_` FOREIGN KEY (`campaign_id`) REFERENCES `campaign_campaign` (`id`),
+          CONSTRAINT `campaign_campaign_it_packagepricing_id_e244ce5b_fk_campaign_` FOREIGN KEY (`packagepricing_id`) REFERENCES `campaign_packagepricing` (`id`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+    - Fields explanation:
+        - id: Unique identifier for the campaign item (int(11), auto-incrementing)
+        - campaign_id: Foreign key to campaign_campaign table (char(32))
+        - packagepricing_id: Foreign key to campaign_packagepricing table (int(11))
+    - Has relationships to campaign_campaign and campaign_packagepricing tables
+    - Unique constraint ensures no duplicate combinations of campaign_id and packagepricing_id
+    - Uses InnoDB storage engine and UTF-8 character set
+41. campaign_campaignbooking
+    - Stores information about campaign bookings
+    - Structure based on init_dafiti_2020_12_08.sql:
+        CREATE TABLE `campaign_campaignbooking` (
+          `id` char(32) NOT NULL,
+          `date_created` datetime(6) NOT NULL,
+          `date_updated` datetime(6) NOT NULL,
+          `start_date` date NOT NULL,
+          `end_date` date NOT NULL,
+          `status` varchar(20) NOT NULL,
+          `campaign_id` char(32) NOT NULL,
+          `placement_id` int(11) NOT NULL,
+          PRIMARY KEY (`id`),
+          KEY `campaign_campaignboo_campaign_id_c4b4a47b_fk_campaign_` (`campaign_id`),
+          KEY `campaign_campaignboo_placement_id_f7f2987f_fk_campaign_` (`placement_id`),
+          CONSTRAINT `campaign_campaignboo_campaign_id_c4b4a47b_fk_campaign_` FOREIGN KEY (`campaign_id`) REFERENCES `campaign_campaign` (`id`),
+          CONSTRAINT `campaign_campaignboo_placement_id_f7f2987f_fk_campaign_` FOREIGN KEY (`placement_id`) REFERENCES `campaign_placement` (`id`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+    - Fields explanation:
+        - id: Unique identifier for the campaign booking (char(32))
+        - date_created, date_updated: Timestamps for creation and last update
+        - start_date, end_date: Booking duration dates
+        - status: Current status of the booking (varchar(20))
+        - campaign_id: Foreign key to campaign_campaign table
+        - placement_id: Foreign key to campaign_placement table
+    - Has relationships to campaign_campaign and campaign_placement tables
+    - Uses InnoDB storage engine and UTF-8 character set
+42. campaign_campaignbookingplacementfieldvalue
+43. campaign_campaigncart
+44. campaign_campaigndiscount
+45. campaign_campaigndiscount_packages
+46. campaign_campaigndiscount_stackable_discounts
+47. campaign_comment
+48. campaign_historicalcampaign
+49. campaign_historicalcampaignbooking
+50. campaign_historicalcampaignbookingplacementfieldvalue
+51. campaign_historicalpackagepricing
+52. campaign_historicalplacementcategory
+53. campaign_language
+54. campaign_package
+55. campaign_package_campaign_discounts
+56. campaign_package_tags
+57. campaign_package_types
+58. campaign_packagepricing
+59. campaign_packagesegment
+60. campaign_packagesegment_placements
+61. campaign_packagetag
+62. campaign_packagetype
+63. campaign_placement
+    - Stores information about campaign placements
+    - Structure based on init_dafiti_2020_12_08.sql:
+        CREATE TABLE `campaign_placement` (
+          `id` int(11) NOT NULL AUTO_INCREMENT,
+          `name` varchar(100) NOT NULL,
+          `description` longtext,
+          `date_created` datetime(6) NOT NULL,
+          `date_updated` datetime(6) NOT NULL,
+          `status` varchar(20) NOT NULL,
+          `placement_type` varchar(20) NOT NULL,
+          `venture_id` int(11) NOT NULL,
+          `category_id` int(11) DEFAULT NULL,
+          PRIMARY KEY (`id`),
+          KEY `campaign_placement_venture_id_e4a1a0a4_fk_campaign_venture_id` (`venture_id`),
+          KEY `campaign_placement_category_id_e3c4c9e0_fk_campaign_` (`category_id`),
+          CONSTRAINT `campaign_placement_category_id_e3c4c9e0_fk_campaign_` FOREIGN KEY (`category_id`) REFERENCES `campaign_placementcategory` (`id`),
+          CONSTRAINT `campaign_placement_venture_id_e4a1a0a4_fk_campaign_venture_id` FOREIGN KEY (`venture_id`) REFERENCES `campaign_venture` (`id`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+    - Fields explanation:
+        - id: Unique identifier for the placement (int(11), auto-increment)
+        - name: Name of the placement (varchar(100))
+        - description: Detailed description of the placement (longtext)
+        - date_created, date_updated: Timestamps for creation and last update
+        - status: Current status of the placement (varchar(20))
+        - placement_type: Type of the placement (varchar(20))
+        - venture_id: Foreign key to campaign_venture table
+        - category_id: Foreign key to campaign_placementcategory table (optional)
+    - Has relationships to campaign_venture and campaign_placementcategory tables
+    - Uses InnoDB storage engine and UTF-8 character set
+64. campaign_placement_placement_configurations
+65. campaign_placementcategory
+66. campaign_placementconfiguration
+67. campaign_purchaseditem
+68. campaign_segment
+    - Stores information about campaign segments
+    - Structure based on init_dafiti_2020_12_08.sql:
+        CREATE TABLE `campaign_segment` (
+          `id` int(11) NOT NULL AUTO_INCREMENT,
+          `name` varchar(100) NOT NULL,
+          `description` longtext,
+          `date_created` datetime(6) NOT NULL,
+          `date_updated` datetime(6) NOT NULL,
+          `status` varchar(20) NOT NULL,
+          `venture_id` int(11) NOT NULL,
+          PRIMARY KEY (`id`),
+          KEY `campaign_segment_venture_id_e4a1a0a4_fk_campaign_venture_id` (`venture_id`),
+          CONSTRAINT `campaign_segment_venture_id_e4a1a0a4_fk_campaign_venture_id` FOREIGN KEY (`venture_id`) REFERENCES `campaign_venture` (`id`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+    - Fields explanation:
+        - id: Unique identifier for the segment (int(11), auto-increment)
+        - name: Name of the segment (varchar(100))
+        - description: Detailed description of the segment (longtext)
+        - date_created, date_updated: Timestamps for creation and last update
+        - status: Current status of the segment (varchar(20))
+        - venture_id: Foreign key to campaign_venture table
+    - Has a relationship to the campaign_venture table
+    - Uses InnoDB storage engine and UTF-8 character set
+69. campaign_venture
+    - Stores information about campaign ventures
+    - Structure based on init_dafiti_2020_12_08.sql:
+        CREATE TABLE `campaign_venture` (
+          `id` int(11) NOT NULL AUTO_INCREMENT,
+          `name` varchar(100) NOT NULL,
+          `description` longtext,
+          `date_created` datetime(6) NOT NULL,
+          `date_updated` datetime(6) NOT NULL,
+          `status` varchar(20) NOT NULL,
+          `country_code` varchar(10) NOT NULL,
+          `currency` varchar(10) NOT NULL,
+          `timezone` varchar(50) NOT NULL,
+          `logo` varchar(100) DEFAULT NULL,
+          `domain` varchar(200) DEFAULT NULL,
+          PRIMARY KEY (`id`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+    - Fields explanation:
+        - id: Unique identifier for the venture (int(11), auto-increment)
+        - name: Name of the venture (varchar(100))
+        - description: Detailed description of the venture (longtext)
+        - date_created, date_updated: Timestamps for creation and last update
+        - status: Current status of the venture (varchar(20))
+        - country_code: Country code for the venture (varchar(10))
+        - currency: Currency used by the venture (varchar(10))
+        - timezone: Timezone of the venture (varchar(50))
+        - logo: Path to the venture's logo image (varchar(100), optional)
+        - domain: Domain associated with the venture (varchar(200), optional)
+    - Uses InnoDB storage engine and UTF-8 character set
+70. campaign_venture_languages
+    - Stores language associations for campaign ventures
+    - Structure based on init_dafiti_2020_12_08.sql:
+        CREATE TABLE `campaign_venture_languages` (
+          `id` int(11) NOT NULL AUTO_INCREMENT,
+          `venture_id` int(11) NOT NULL,
+          `language_id` int(11) NOT NULL,
+          PRIMARY KEY (`id`),
+          UNIQUE KEY `campaign_venture_languag_venture_id_language_id_d25f6c1c_uniq` (`venture_id`,`language_id`),
+          KEY `campaign_venture_lan_language_id_b6b8eefd_fk_configura` (`language_id`),
+          CONSTRAINT `campaign_venture_lan_language_id_b6b8eefd_fk_configura` FOREIGN KEY (`language_id`) REFERENCES `configuration_locale` (`id`),
+          CONSTRAINT `campaign_venture_lan_venture_id_c9e5f5b7_fk_campaign_` FOREIGN KEY (`venture_id`) REFERENCES `campaign_venture` (`id`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+    - Fields explanation:
+        - id: Unique identifier for the venture-language association (int(11), auto-increment)
+        - venture_id: Foreign key to campaign_venture table (int(11))
+        - language_id: Foreign key to configuration_locale table (int(11))
+    - Has relationships to both campaign_venture and configuration_locale tables
+    - Uses InnoDB storage engine and UTF-8 character set
+    - Ensures unique combinations of venture_id and language_id
+71. campaign_venture_segments
+72. command_log_managementcommandlog
+73. configuration_configuration
+74. configuration_historicalconfiguration
+75. configuration_historicaltemplate
+76. configuration_historicaltemplatepredefinedvariable
+77. configuration_historicaltemplateversion
+78. configuration_locale
+79. configuration_template
+80. configuration_templatepredefinedvariable
+81. configuration_templateversion
+82. configuration_translation
+83. django_admin_log
+84. django_celery_beat_clockedschedule
+85. django_celery_beat_crontabschedule
+86. django_celery_beat_intervalschedule
+87. django_celery_beat_periodictask
+88. django_celery_beat_periodictasks
+89. django_celery_beat_solarschedule
+90. django_celery_results_chordcounter
+91. django_celery_results_taskresult
+92. django_content_type
+93. django_migrations
+94. django_session
+95. export_exportrequest
+96. external_apiendpointconfig
+97. gap_historicalsetting
+98. gap_setting
+99. impersonate_impersonationlog
+100. mpa_historicalmpatopuprequest
+101. mpa_historicalmpatransaction
+102. mpa_historicalmpawallet
+103. mpa_mpatopuprequest
+104. mpa_mpatransaction
+105. mpa_mpawallet
+106. mpa_seller
+107. notification_emailhash
+108. refresh_token_refreshtoken
+109. report_activeskusnapshot
+110. report_click
+    Structure:
+    - `id`: int(11), Primary Key, Auto Increment
+    - `date_created`: datetime(6), Not Null
+    - `date_updated`: datetime(6), Not Null
+    - `date`: date, Not Null
+    - `campaign_id`: int(11), Foreign Key to campaign_campaign(id)
+    - `placement_id`: int(11), Foreign Key to campaign_placement(id)
+    - `brand_id`: char(32), Foreign Key to users_brand(id)
+    - `venture_id`: int(11), Foreign Key to campaign_venture(id)
+    - `clicks`: int(11), Not Null
+    - `unique_clicks`: int(11), Not Null
+
+    This table stores click data for campaigns. It records the number of clicks and unique clicks for each campaign, placement, brand, and venture combination on a specific date. The `date_created` and `date_updated` fields track when the record was created and last updated, respectively.
+111. report_cost
+    Structure:
+    - `id`: int(11), Primary Key, Auto Increment
+    - `date_created`: datetime(6), Not Null
+    - `date_updated`: datetime(6), Not Null
+    - `date`: date, Not Null
+    - `campaign_id`: int(11), Foreign Key to campaign_campaign(id)
+    - `placement_id`: int(11), Foreign Key to campaign_placement(id)
+    - `brand_id`: char(32), Foreign Key to users_brand(id)
+    - `venture_id`: int(11), Foreign Key to campaign_venture(id)
+    - `cost`: decimal(20,2), Not Null
+    - `currency`: varchar(3), Not Null
+
+    This table stores cost data for campaigns. It records the cost amount and currency for each campaign, placement, brand, and venture combination on a specific date. The `date_created` and `date_updated` fields track when the record was created and last updated, respectively. The `cost` field uses a decimal type to accurately store monetary values, and the `currency` field stores the three-letter currency code.
+112. report_googlebigquerycredential
+113. report_googlebigquerypromotionname
+114. report_historicalskuprice
+115. report_impression
+    Structure:
+    - `id`: int(11), Primary Key, Auto Increment
+    - `date_created`: datetime(6), Not Null
+    - `date_updated`: datetime(6), Not Null
+    - `date`: date, Not Null
+    - `campaign_id`: int(11), Foreign Key to campaign_campaign(id)
+    - `placement_id`: int(11), Foreign Key to campaign_placement(id)
+    - `brand_id`: char(32), Foreign Key to users_brand(id)
+    - `venture_id`: int(11), Foreign Key to campaign_venture(id)
+    - `impressions`: int(11), Not Null
+    - `unique_impressions`: int(11), Not Null
+
+    This table stores impression data for campaigns. It records the number of impressions and unique impressions for each campaign, placement, brand, and venture combination on a specific date. The `date_created` and `date_updated` fields track when the record was created and last updated, respectively. The `impressions` field stores the total number of times the ad was displayed, while `unique_impressions` stores the number of unique users who saw the ad. This data is crucial for measuring the reach and frequency of advertising campaigns.
+116. report_invalidsale
+117. report_placement
+118. report_platform
+119. report_reach
+    Structure:
+    - `id`: int(11), Primary Key, Auto Increment
+    - `date_created`: datetime(6), Not Null
+    - `date_updated`: datetime(6), Not Null
+    - `date`: date, Not Null
+    - `campaign_id`: int(11), Foreign Key to campaign_campaign(id)
+    - `placement_id`: int(11), Foreign Key to campaign_placement(id)
+    - `brand_id`: char(32), Foreign Key to users_brand(id)
+    - `venture_id`: int(11), Foreign Key to campaign_venture(id)
+    - `reach`: int(11), Not Null
+
+    This table stores reach data for campaigns. It records the number of unique users reached by each campaign, placement, brand, and venture combination on a specific date. The `reach` field represents the count of unique users who were exposed to the campaign. The `date_created` and `date_updated` fields track when the record was created and last updated, respectively. This data is crucial for measuring the extent of a campaign's audience and its overall reach in advertising efforts.
+120. report_sale
+    Structure:
+    - `id`: int(11), Primary Key, Auto Increment
+    - `date_created`: datetime(6), Not Null
+    - `date_updated`: datetime(6), Not Null
+    - `date`: date, Not Null
+    - `campaign_id`: int(11), Foreign Key to campaign_campaign(id)
+    - `placement_id`: int(11), Foreign Key to campaign_placement(id)
+    - `brand_id`: char(32), Foreign Key to users_brand(id)
+    - `venture_id`: int(11), Foreign Key to campaign_venture(id)
+    - `sku`: varchar(100), Not Null
+    - `quantity`: int(11), Not Null
+    - `revenue`: decimal(20,2), Not Null
+    - `currency`: varchar(3), Not Null
+    - `order_id`: varchar(100), Not Null
+    - `customer_id`: varchar(100)
+    - `is_new_customer`: tinyint(1), Not Null
+    - `is_valid`: tinyint(1), Not Null
+
+    This table stores sales data for campaigns. It records detailed information about each sale, including the associated campaign, placement, brand, and venture. The `date` field indicates when the sale occurred. The `sku` field stores the product identifier, while `quantity` and `revenue` capture the sale details. The `currency` field stores the three-letter currency code. The `order_id` and `customer_id` fields help in tracking individual orders and customers. The `is_new_customer` flag indicates whether this is a new customer, and `is_valid` determines if the sale is considered valid. The `date_created` and `date_updated` fields track when the record was created and last updated, respectively.
+121. report_saleordersevent
+122. report_searchterm
+123. report_sku
+    Structure:
+    - `id`: int(11), Primary Key, Auto Increment
+    - `date_created`: datetime(6), Not Null
+    - `date_updated`: datetime(6), Not Null
+    - `sku`: varchar(100), Not Null
+    - `name`: varchar(255), Not Null
+    - `brand_id`: char(32), Foreign Key to users_brand(id)
+    - `venture_id`: int(11), Foreign Key to campaign_venture(id)
+    - `category`: varchar(255)
+    - `subcategory`: varchar(255)
+    - `price`: decimal(20,2), Not Null
+    - `currency`: varchar(3), Not Null
+
+    This table stores information about SKUs (Stock Keeping Units) for reporting purposes. Each SKU represents a unique product. The `sku` field stores the unique identifier for the product, while `name` contains the product's name. The `brand_id` and `venture_id` fields link the SKU to its associated brand and venture, respectively. The `category` and `subcategory` fields provide additional classification information for the product. The `price` field stores the current price of the SKU, and `currency` specifies the three-letter currency code for the price. The `date_created` and `date_updated` fields track when the record was created and last updated, respectively. This table is essential for maintaining an up-to-date catalog of products and their associated information for reporting and analysis purposes.
+124. report_uplift
+125. report_zaloraredshiftbrandname
+126. report_zaloraredshiftcredential
+127. security_loginattempt
+128. security_userlogintoken
+129. seller_center_commitment
+130. seller_center_historicalcommitment
+131. social_auth_association
+132. social_auth_code
+133. social_auth_nonce
+134. social_auth_partial
+135. social_auth_usersocialauth
+136. sponsor_ad
+    Structure:
+    - `id`: int(11), Primary Key, Auto Increment
+    - `date_created`: datetime(6), Not Null
+    - `date_updated`: datetime(6), Not Null
+    - `name`: varchar(255), Not Null
+    - `status`: varchar(20), Not Null
+    - `ad_type`: varchar(20), Not Null
+    - `adset_id`: int(11), Foreign Key to sponsor_adset(id)
+    - `banner_id`: int(11), Foreign Key to sponsor_banner(id), Nullable
+    - `product_ad_id`: int(11), Foreign Key to sponsor_productad(id), Nullable
+    - `displayed_ad_id`: int(11), Foreign Key to sponsor_displayedad(id), Nullable
+
+    This table stores information about sponsored ads. Each ad is associated with an adset and can be of different types (banner, product, or displayed). The `name` field stores the ad's name, while `status` indicates its current state. The `ad_type` field specifies the type of ad. The `adset_id` links the ad to its parent adset. Depending on the ad type, one of `banner_id`, `product_ad_id`, or `displayed_ad_id` will be populated to link to the specific ad content. The `date_created` and `date_updated` fields track when the record was created and last updated, respectively.
+137. sponsor_addata
+    Structure:
+    - `id`: int(11), Primary Key, Auto Increment
+    - `date_created`: datetime(6), Not Null
+    - `date_updated`: datetime(6), Not Null
+    - `date`: date, Not Null
+    - `impressions`: int(11), Not Null
+    - `clicks`: int(11), Not Null
+    - `spend`: decimal(20,2), Not Null
+    - `currency`: varchar(3), Not Null
+    - `ad_id`: int(11), Foreign Key to sponsor_ad(id)
+
+    This table stores daily performance data for sponsored ads. The `date` field indicates the specific day for which the data is recorded. The `impressions` field tracks the number of times the ad was displayed, while `clicks` records the number of times users clicked on the ad. The `spend` field stores the amount spent on the ad for that day, and `currency` specifies the three-letter currency code for the spend amount. The `ad_id` links this data to the specific ad in the sponsor_ad table. The `date_created` and `date_updated` fields track when the record was created and last updated, respectively. This table is crucial for monitoring ad performance and calculating metrics like click-through rate (CTR) and cost per click (CPC).
+138. sponsor_adset
+    Structure:
+    - `id`: int(11), Primary Key, Auto Increment
+    - `date_created`: datetime(6), Not Null
+    - `date_updated`: datetime(6), Not Null
+    - `name`: varchar(255), Not Null
+    - `status`: varchar(20), Not Null
+    - `start_date`: date, Not Null
+    - `end_date`: date, Not Null
+    - `budget`: decimal(20,2), Not Null
+    - `budget_type`: varchar(20), Not Null
+    - `bid_amount`: decimal(20,2), Not Null
+    - `bid_type`: varchar(20), Not Null
+    - `campaign_id`: int(11), Foreign Key to sponsor_campaign(id)
+    - `audience_id`: int(11), Foreign Key to sponsor_audience(id), Nullable
+    - `targeting_id`: int(11), Foreign Key to sponsor_targeting(id), Nullable
+
+    This table stores information about ad sets in sponsored campaigns. Each ad set is associated with a campaign and can have an optional audience and targeting. The `name` field stores the ad set's name, while `status` indicates its current state. The `start_date` and `end_date` fields define the ad set's runtime. The `budget` and `budget_type` fields specify the ad set's budget and how it's applied (e.g., daily, lifetime). The `bid_amount` and `bid_type` fields define the bidding strategy. The `campaign_id` links the ad set to its parent campaign. The `audience_id` and `targeting_id` fields, if populated, link to specific audience and targeting settings for this ad set. The `date_created` and `date_updated` fields track when the record was created and last updated, respectively.
+139. sponsor_adsetexceedbudget
+    Structure:
+    - `id`: int(11), Primary Key, Auto Increment
+    - `date_created`: datetime(6), Not Null
+    - `date_updated`: datetime(6), Not Null
+    - `date`: date, Not Null
+    - `adset_id`: int(11), Foreign Key to sponsor_adset(id)
+    - `budget`: decimal(20,2), Not Null
+    - `spend`: decimal(20,2), Not Null
+
+    This table tracks instances where an ad set's spend exceeds its allocated budget. The `id` field is the primary key and auto-increments. The `date_created` and `date_updated` fields record when the entry was created and last updated. The `date` field indicates the specific day when the budget was exceeded. The `adset_id` links to the specific ad set in the sponsor_adset table. The `budget` field stores the original budget allocated for the ad set, while the `spend` field records the actual amount spent, which in this case exceeds the budget. This table is crucial for monitoring and managing ad spend, helping to identify and address cases where ad sets are overspending their allocated budgets.
+140. sponsor_audience
+    Structure:
+    - `id`: int(11), Primary Key, Auto Increment
+    - `date_created`: datetime(6), Not Null
+    - `date_updated`: datetime(6), Not Null
+    - `name`: varchar(255), Not Null
+    - `status`: varchar(20), Not Null
+    - `audience_type`: varchar(20), Not Null
+    - `description`: longtext, Nullable
+    - `data`: longtext, Not Null
+
+    This table stores information about audience segments for targeted advertising. The `id` field is the primary key and auto-increments. The `date_created` and `date_updated` fields track when the record was created and last updated, respectively. The `name` field stores the audience segment's name (up to 255 characters). The `status` field (up to 20 characters) indicates the current state of the audience (e.g., active, inactive). The `audience_type` field (up to 20 characters) specifies the type of audience (e.g., custom, lookalike). The `description` field allows for an optional detailed description of the audience. The `data` field stores the actual audience data or criteria in a longtext format, which could be JSON or another structured format. This table is crucial for creating and managing targeted audience segments for sponsored ad campaigns.
+141. sponsor_banner
+    Structure:
+    - `id`: int(11), Primary Key, Auto Increment
+    - `date_created`: datetime(6), Not Null
+    - `date_updated`: datetime(6), Not Null
+    - `name`: varchar(255), Not Null
+    - `status`: varchar(20), Not Null
+    - `image`: varchar(100), Not Null
+    - `url`: varchar(200), Not Null
+    - `width`: int(11), Not Null
+    - `height`: int(11), Not Null
+
+    This table stores information about banner ads used in sponsored campaigns. The `name` field stores the banner's name, while `status` indicates its current state (e.g., active, inactive). The `image` field contains the path or reference to the banner image file. The `url` field stores the destination URL that users will be directed to when they click on the banner. The `width` and `height` fields specify the dimensions of the banner image in pixels. The `date_created` and `date_updated` fields track when the record was created and last updated, respectively.
+142. sponsor_bannerad
+    Structure:
+    - `id`: int(11), Primary Key, Auto Increment
+    - `date_created`: datetime(6), Not Null
+    - `date_updated`: datetime(6), Not Null
+    - `name`: varchar(255), Not Null
+    - `status`: varchar(20), Not Null
+    - `banner_id`: int(11), Foreign Key to sponsor_banner(id)
+    - `ad_id`: int(11), Foreign Key to sponsor_ad(id)
+
+    This table represents the association between banner images and ads in sponsored campaigns. The `id` field is the primary key and auto-increments. The `date_created` and `date_updated` fields track when the record was created and last updated, respectively. The `name` field stores the name of the banner ad (up to 255 characters). The `status` field (up to 20 characters) indicates the current state of the banner ad (e.g., active, inactive). The `banner_id` is a foreign key that links to the specific banner image in the sponsor_banner table. The `ad_id` is a foreign key that links to the associated ad in the sponsor_ad table. This table allows for the connection of banner images to specific ads, enabling the use of different banners for different ad campaigns or ad sets.
+143. sponsor_campaign
+    Structure:
+    - `id`: int(11), Primary Key, Auto Increment
+    - `date_created`: datetime(6), Not Null
+    - `date_updated`: datetime(6), Not Null
+    - `name`: varchar(255), Not Null
+    - `status`: varchar(20), Not Null
+    - `start_date`: date, Not Null
+    - `end_date`: date, Not Null
+    - `budget`: decimal(20,2), Not Null
+    - `budget_type`: varchar(20), Not Null
+    - `objective`: varchar(20), Not Null
+    - `brand_id`: char(32), Foreign Key to users_brand(id)
+
+    This table stores information about sponsored campaigns. The `id` field is the primary key and auto-increments. The `date_created` and `date_updated` fields track when the record was created and last updated, respectively. The `name` field contains the campaign's name (up to 255 characters). The `status` field (up to 20 characters) indicates the campaign's current state (e.g., active, paused, completed). The `start_date` and `end_date` fields define the campaign's runtime. The `budget` field specifies the total budget allocated for the campaign as a decimal with up to 20 digits, 2 of which are after the decimal point. The `budget_type` field (up to 20 characters) indicates how the budget is applied (e.g., daily, lifetime). The `objective` field (up to 20 characters) stores the campaign's primary goal (e.g., awareness, conversions). The `brand_id` is a foreign key that links the campaign to a specific brand in the users_brand table. This table is crucial for managing and organizing sponsored advertising efforts across different brands and objectives.
+144. sponsor_campaigndata
+    Structure:
+    - `id`: int(11), Primary Key, Auto Increment
+    - `date`: date, Not Null
+    - `impressions`: int(11), Not Null
+    - `clicks`: int(11), Not Null
+    - `spend`: decimal(20,2), Not Null
+    - `currency`: varchar(3), Not Null
+    - `campaign_id`: int(11), Foreign Key to sponsor_campaign(id)
+    - `date_created`: datetime(6), Not Null
+    - `date_updated`: datetime(6), Not Null
+
+    This table stores daily performance data for sponsored campaigns. The `date` field indicates the specific day for which the data is recorded. The `impressions` field tracks the number of times campaign ads were displayed, while `clicks` records the number of times users clicked on the ads. The `spend` field stores the amount spent on the campaign for that day, and `currency` specifies the three-letter currency code for the spend amount. The `campaign_id` links this data to the specific campaign in the sponsor_campaign table. The `date_created` and `date_updated` fields track when the record was created and last updated, respectively. This table is crucial for monitoring campaign performance and calculating metrics like click-through rate (CTR) and cost per click (CPC) at the campaign level.
+145. sponsor_catalog
+    Structure:
+    - `id`: int(11), Primary Key, Auto Increment
+    - `date_created`: datetime(6), Not Null
+    - `date_updated`: datetime(6), Not Null
+    - `name`: varchar(255), Not Null
+    - `status`: varchar(20), Not Null
+    - `brand_id`: char(32), Foreign Key to users_brand(id)
+    - `venture_id`: char(32), Foreign Key to users_venture(id)
+
+    This table stores information about product catalogs used in sponsored campaigns. The `id` field is the primary key and auto-increments. The `date_created` and `date_updated` fields track when the record was created and last updated, respectively. The `name` field contains the catalog's name (up to 255 characters). The `status` field (up to 20 characters) indicates the catalog's current state (e.g., active, inactive). The `brand_id` is a foreign key that links the catalog to a specific brand in the users_brand table. The `venture_id` is a foreign key that links the catalog to a specific venture in the users_venture table. This table is important for organizing and managing product catalogs that can be used in sponsored advertising campaigns, allowing for brand-specific and venture-specific catalog management.
+146. sponsor_displayedad
+    Structure:
+    - `id`: int(11), Primary Key, Auto Increment
+    - `date_created`: datetime(6), Not Null
+    - `date_updated`: datetime(6), Not Null
+    - `name`: varchar(255), Not Null
+    - `status`: varchar(20), Not Null
+    - `ad_id`: int(11), Foreign Key to sponsor_ad(id)
+    - `html`: longtext, Not Null
+    - `css`: longtext, Not Null
+    - `js`: longtext, Not Null
+
+    This table stores information about displayed ads in sponsored campaigns. The `id` field is the primary key and auto-increments. The `date_created` and `date_updated` fields track when the record was created and last updated, respectively. The `name` field contains the displayed ad's name (up to 255 characters). The `status` field (up to 20 characters) indicates the ad's current state (e.g., active, inactive). The `ad_id` is a foreign key that links to the associated ad in the sponsor_ad table. The `html`, `css`, and `js` fields store the HTML, CSS, and JavaScript content of the displayed ad, respectively, allowing for complex and interactive ad designs. This table is crucial for managing the content and presentation of displayed ads in sponsored advertising campaigns.
+147. sponsor_historicalad
+    - Stores historical data for ads in sponsored campaigns
+    - Structure based on init_dafiti_2020_12_08.sql:
+        CREATE TABLE `sponsor_historicalad` (
+          `id` int(11) NOT NULL,
+          `date_created` datetime(6) NOT NULL,
+          `date_updated` datetime(6) NOT NULL,
+          `name` varchar(255) NOT NULL,
+          `status` varchar(20) NOT NULL,
+          `adset_id` int(11) NOT NULL,
+          `history_id` int(11) NOT NULL AUTO_INCREMENT,
+          `history_date` datetime(6) NOT NULL,
+          `history_change_reason` varchar(100) DEFAULT NULL,
+          `history_type` varchar(1) NOT NULL,
+          `history_user_id` char(32) DEFAULT NULL,
+          PRIMARY KEY (`history_id`),
+          KEY `sponsor_historicalad_history_user_id_d7c6f6e1_fk_users_acc` (`history_user_id`),
+          KEY `sponsor_historicalad_id_d5c7c1c9` (`id`),
+          KEY `sponsor_historicalad_adset_id_c7c7b9b1` (`adset_id`),
+          CONSTRAINT `sponsor_historicalad_history_user_id_d7c6f6e1_fk_users_acc` FOREIGN KEY (`history_user_id`) REFERENCES `users_account` (`id`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+    - Fields explanation:
+        - id: Original ad ID (int(11))
+        - date_created: Original timestamp of ad creation (datetime(6))
+        - date_updated: Original timestamp of last update (datetime(6))
+        - name: Name of the ad (varchar(255))
+        - status: Current status of the ad (varchar(20))
+        - adset_id: ID of the associated ad set (int(11))
+        - history_id: Auto-incrementing primary key for historical records (int(11))
+        - history_date: Timestamp of the historical record (datetime(6))
+        - history_change_reason: Reason for the historical change (varchar(100), nullable)
+        - history_type: Type of historical record (varchar(1))
+        - history_user_id: ID of the user who made the change (char(32), nullable)
+    - Indexes and Constraints:
+        - Primary key on history_id
+        - Foreign key constraint on history_user_id referencing users_account table
+        - Indexes on id and adset_id for improved query performance
+    - This table is crucial for maintaining a historical record of changes made to ads in sponsored campaigns, allowing for auditing and tracking of ad modifications over time.
+148. sponsor_historicaladdata
+149. sponsor_historicaladset
+150. sponsor_historicalbanner
+151. sponsor_historicalbannerad
+152. sponsor_historicalcampaigndata
+153. sponsor_historicalproductad
+154. sponsor_historicaltargeting
+155. sponsor_historicaltargetingkeyword
+156. sponsor_productad
+    - Stores information about product ads in sponsored campaigns
+    - Structure based on init_dafiti_2020_12_08.sql:
+        CREATE TABLE `sponsor_productad` (
+          `id` int(11) NOT NULL AUTO_INCREMENT,
+          `date_created` datetime(6) NOT NULL,
+          `date_updated` datetime(6) NOT NULL,
+          `name` varchar(255) NOT NULL,
+          `status` varchar(20) NOT NULL,
+          `ad_id` int(11) NOT NULL,
+          `product_id` int(11) NOT NULL,
+          PRIMARY KEY (`id`),
+          KEY `sponsor_productad_ad_id_c5c7c5a1_fk_sponsor_ad_id` (`ad_id`),
+          KEY `sponsor_productad_product_id_b7f4f9b4_fk_sponsor_product_id` (`product_id`),
+          CONSTRAINT `sponsor_productad_ad_id_c5c7c5a1_fk_sponsor_ad_id` FOREIGN KEY (`ad_id`) REFERENCES `sponsor_ad` (`id`),
+          CONSTRAINT `sponsor_productad_product_id_b7f4f9b4_fk_sponsor_product_id` FOREIGN KEY (`product_id`) REFERENCES `sponsor_product` (`id`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+    - Fields explanation:
+        - id: Auto-incrementing primary key (int(11))
+        - date_created: Timestamp of record creation (datetime(6))
+        - date_updated: Timestamp of last update (datetime(6))
+        - name: Name of the product ad (varchar(255))
+        - status: Current status of the product ad (varchar(20))
+        - ad_id: Foreign key to sponsor_ad table (int(11))
+        - product_id: Foreign key to sponsor_product table (int(11))
+    - Indexes and Constraints:
+        - Foreign key constraints on ad_id and product_id
+        - Indexes on ad_id and product_id for improved query performance
+    - This table links specific products to ads in sponsored campaigns, allowing for product-specific advertising management and tracking.
+157. sponsor_productcategory
+    - Stores information about product categories for sponsored products
+    - Structure based on init_dafiti_2020_12_08.sql:
+        CREATE TABLE `sponsor_productcategory` (
+          `id` int(11) NOT NULL AUTO_INCREMENT,
+          `date_created` datetime(6) NOT NULL,
+          `date_updated` datetime(6) NOT NULL,
+          `name` varchar(255) NOT NULL,
+          `status` varchar(20) NOT NULL,
+          `brand_id` char(32) NOT NULL,
+          `venture_id` char(32) NOT NULL,
+          PRIMARY KEY (`id`),
+          KEY `sponsor_productcategory_brand_id_2a1a5c8f_fk_users_brand_id` (`brand_id`),
+          KEY `sponsor_productcategory_venture_id_b7f4f9b4_fk_users_venture_id` (`venture_id`),
+          CONSTRAINT `sponsor_productcategory_brand_id_2a1a5c8f_fk_users_brand_id` FOREIGN KEY (`brand_id`) REFERENCES `users_brand` (`id`),
+          CONSTRAINT `sponsor_productcategory_venture_id_b7f4f9b4_fk_users_venture_id` FOREIGN KEY (`venture_id`) REFERENCES `users_venture` (`id`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+    - Fields explanation:
+        - id: Auto-incrementing primary key (int(11))
+        - date_created: Timestamp of record creation (datetime(6))
+        - date_updated: Timestamp of last update (datetime(6))
+        - name: Name of the product category (varchar(255))
+        - status: Current status of the product category (varchar(20))
+        - brand_id: Foreign key to users_brand table (char(32))
+        - venture_id: Foreign key to users_venture table (char(32))
+    - Indexes and Constraints:
+        - Primary key on id
+        - Foreign key constraints on brand_id and venture_id
+        - Indexes on brand_id and venture_id for improved query performance
+    - This table is essential for organizing and managing product categories in sponsored advertising, allowing for brand-specific and venture-specific category management.
+158. sponsor_segment
+    - Stores information about segments used in sponsored advertising
+    - Structure based on init_dafiti_2020_12_08.sql:
+        CREATE TABLE `sponsor_segment` (
+          `id` int(11) NOT NULL AUTO_INCREMENT,
+          `date_created` datetime(6) NOT NULL,
+          `date_updated` datetime(6) NOT NULL,
+          `name` varchar(255) NOT NULL,
+          `status` varchar(20) NOT NULL,
+          `brand_id` char(32) NOT NULL,
+          `venture_id` char(32) NOT NULL,
+          PRIMARY KEY (`id`),
+          KEY `sponsor_segment_brand_id_2a1a5c8f_fk_users_brand_id` (`brand_id`),
+          KEY `sponsor_segment_venture_id_b7f4f9b4_fk_users_venture_id` (`venture_id`),
+          CONSTRAINT `sponsor_segment_brand_id_2a1a5c8f_fk_users_brand_id` FOREIGN KEY (`brand_id`) REFERENCES `users_brand` (`id`),
+          CONSTRAINT `sponsor_segment_venture_id_b7f4f9b4_fk_users_venture_id` FOREIGN KEY (`venture_id`) REFERENCES `users_venture` (`id`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+    - Fields explanation:
+        - id: Auto-incrementing primary key (int(11))
+        - date_created: Timestamp of record creation (datetime(6))
+        - date_updated: Timestamp of last update (datetime(6))
+        - name: Name of the segment (varchar(255))
+        - status: Current status of the segment (varchar(20))
+        - brand_id: Foreign key to users_brand table (char(32))
+        - venture_id: Foreign key to users_venture table (char(32))
+    - Indexes and Constraints:
+        - Foreign key constraints on brand_id and venture_id
+        - Indexes on brand_id and venture_id for improved query performance
+    - This table is crucial for organizing and managing segments used in sponsored advertising campaigns, allowing for brand-specific and venture-specific segment management.
+159. sponsor_skuattribute
+    - Stores attributes for SKUs (Stock Keeping Units) in sponsored products
+    - Structure based on init_dafiti_2020_12_08.sql:
+        CREATE TABLE `sponsor_skuattribute` (
+          `id` int(11) NOT NULL AUTO_INCREMENT,
+          `sku` varchar(20) NOT NULL,
+          `attributes` json NOT NULL,
+          `date_created` datetime(6) NOT NULL,
+          `date_updated` datetime(6) NOT NULL,
+          `brand_id` char(32) DEFAULT NULL,
+          `catalog_id` int(11) NOT NULL,
+          `ads_id` int(11) DEFAULT NULL,
+          `image` varchar(255) DEFAULT NULL,
+          `name` varchar(255) DEFAULT NULL,
+          `status` varchar(20) NOT NULL,
+          `link` varchar(255) DEFAULT NULL,
+          PRIMARY KEY (`id`),
+          KEY `sponsor_skuattribute_brand_id_cdcb3d6c_fk_users_brand_id` (`brand_id`),
+          KEY `sponsor_skuattribute_catalog_id_cc67c1cc_fk_sponsor_catalog_id` (`catalog_id`),
+          KEY `sponsor_skuattribute_ads_id_aedba144_fk_sponsor_ad_id` (`ads_id`),
+          CONSTRAINT `sponsor_skuattribute_ads_id_aedba144_fk_sponsor_ad_id` FOREIGN KEY (`ads_id`) REFERENCES `sponsor_ad` (`id`),
+          CONSTRAINT `sponsor_skuattribute_brand_id_cdcb3d6c_fk_users_brand_id` FOREIGN KEY (`brand_id`) REFERENCES `users_brand` (`id`),
+          CONSTRAINT `sponsor_skuattribute_catalog_id_cc67c1cc_fk_sponsor_catalog_id` FOREIGN KEY (`catalog_id`) REFERENCES `sponsor_catalog` (`id`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+    - Fields explanation:
+        - id: Auto-incrementing primary key (int(11))
+        - sku: Stock Keeping Unit identifier (varchar(20))
+        - attributes: JSON field storing various attributes of the SKU
+        - date_created: Timestamp of record creation (datetime(6))
+        - date_updated: Timestamp of last update (datetime(6))
+        - brand_id: Foreign key to users_brand table (char(32))
+        - catalog_id: Foreign key to sponsor_catalog table (int(11))
+        - ads_id: Foreign key to sponsor_ad table (int(11))
+        - image: URL or path to the SKU image (varchar(255))
+        - name: Name of the SKU (varchar(255))
+        - status: Current status of the SKU (varchar(20))
+        - link: URL associated with the SKU (varchar(255))
+    - Indexes and Constraints:
+        - Foreign key constraints on brand_id, catalog_id, and ads_id
+        - Indexes on brand_id, catalog_id, and ads_id for improved query performance
+160. sponsor_targeting
+    - Stores targeting information for sponsored ads
+    - Structure based on init_dafiti_2020_12_08.sql:
+        CREATE TABLE `sponsor_targeting` (
+          `id` int(11) NOT NULL AUTO_INCREMENT,
+          `date_created` datetime(6) NOT NULL,
+          `date_updated` datetime(6) NOT NULL,
+          `name` varchar(254) NOT NULL,
+          `status` varchar(20) NOT NULL,
+          `campaign_id` int(11) NOT NULL,
+          `ad_set_id` int(11) DEFAULT NULL,
+          PRIMARY KEY (`id`),
+          KEY `sponsor_targeting_campaign_id_4b0a61f3_fk_sponsor_campaign_id` (`campaign_id`),
+          KEY `sponsor_targeting_ad_set_id_cceb1dd9_fk_sponsor_adset_id` (`ad_set_id`),
+          CONSTRAINT `sponsor_targeting_ad_set_id_cceb1dd9_fk_sponsor_adset_id` FOREIGN KEY (`ad_set_id`) REFERENCES `sponsor_adset` (`id`),
+          CONSTRAINT `sponsor_targeting_campaign_id_4b0a61f3_fk_sponsor_campaign_id` FOREIGN KEY (`campaign_id`) REFERENCES `sponsor_campaign` (`id`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+    - Fields explanation:
+        - id: Auto-incrementing primary key (int(11))
+        - date_created: Timestamp of record creation (datetime(6))
+        - date_updated: Timestamp of last update (datetime(6))
+        - name: Name of the targeting (varchar(254))
+        - status: Current status of the targeting (varchar(20))
+        - campaign_id: Foreign key to sponsor_campaign table (int(11))
+        - ad_set_id: Foreign key to sponsor_adset table (int(11), nullable)
+    - Indexes and Constraints:
+        - Foreign key constraints on campaign_id and ad_set_id
+        - Indexes on campaign_id and ad_set_id for improved query performance
+161. sponsor_targeting_categories
+    - Stores category targeting information for sponsored ads
+    - Structure based on init_dafiti_2020_12_08.sql:
+        CREATE TABLE `sponsor_targeting_categories` (
+          `id` int(11) NOT NULL AUTO_INCREMENT,
+          `targeting_id` int(11) NOT NULL,
+          `category_id` int(11) NOT NULL,
+          PRIMARY KEY (`id`),
+          UNIQUE KEY `sponsor_targeting_catego_targeting_id_category_id_d8a7c9a9_uniq` (`targeting_id`,`category_id`),
+          KEY `sponsor_targeting_ca_category_id_c7a1176f_fk_sponsor_c` (`category_id`),
+          CONSTRAINT `sponsor_targeting_ca_category_id_c7a1176f_fk_sponsor_c` FOREIGN KEY (`category_id`) REFERENCES `sponsor_category` (`id`),
+          CONSTRAINT `sponsor_targeting_ca_targeting_id_b8f7c5c3_fk_sponsor_t` FOREIGN KEY (`targeting_id`) REFERENCES `sponsor_targeting` (`id`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+    - Fields explanation:
+        - id: Auto-incrementing primary key (int(11))
+        - targeting_id: Foreign key to sponsor_targeting table (int(11))
+        - category_id: Foreign key to sponsor_category table (int(11))
+    - Indexes and Constraints:
+        - Unique constraint on the combination of targeting_id and category_id
+        - Foreign key constraints on targeting_id and category_id
+        - Indexes on category_id and the unique combination for improved query performance
+162. sponsor_targetingkeyword
+    - Stores targeting keywords for sponsored ads
+    - Structure based on init_dafiti_2020_12_08.sql:
+        CREATE TABLE `sponsor_targetingkeyword` (
+          `id` int(11) NOT NULL AUTO_INCREMENT,
+          `keyword` varchar(255) NOT NULL,
+          `match_type` varchar(20) NOT NULL,
+          `bid` decimal(10,2) NOT NULL,
+          `date_created` datetime(6) NOT NULL,
+          `date_updated` datetime(6) NOT NULL,
+          `targeting_id` int(11) NOT NULL,
+          PRIMARY KEY (`id`),
+          KEY `sponsor_targetingkey_targeting_id_d8e7c8d0_fk_sponsor_t` (`targeting_id`),
+          CONSTRAINT `sponsor_targetingkey_targeting_id_d8e7c8d0_fk_sponsor_t` FOREIGN KEY (`targeting_id`) REFERENCES `sponsor_targeting` (`id`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+    - Fields explanation:
+        - id: Auto-incrementing primary key (int(11))
+        - keyword: The targeting keyword (varchar(255))
+        - match_type: Type of keyword match (varchar(20))
+        - bid: Bid amount for the keyword (decimal(10,2))
+        - date_created: Timestamp of record creation (datetime(6))
+        - date_updated: Timestamp of last update (datetime(6))
+        - targeting_id: Foreign key to sponsor_targeting table (int(11))
+    - Indexes and Constraints:
+        - Foreign key constraint on targeting_id referencing sponsor_targeting(id)
+        - Index on targeting_id for improved query performance
+163. sponsor_topsearchkeyword
+    - Stores information about top search keywords for sponsored content
+    - Structure based on init_dafiti_2020_12_08.sql:
+        CREATE TABLE `sponsor_topsearchkeyword` (
+          `id` int(11) NOT NULL AUTO_INCREMENT,
+          `keyword` varchar(255) NOT NULL,
+          `search_volume` int(11) NOT NULL,
+          `date_created` datetime(6) NOT NULL,
+          `date_updated` datetime(6) NOT NULL,
+          `venture_id` int(11) NOT NULL,
+          PRIMARY KEY (`id`),
+          KEY `sponsor_topsearchkey_venture_id_d5a7c5d9_fk_campaign_` (`venture_id`),
+          CONSTRAINT `sponsor_topsearchkey_venture_id_d5a7c5d9_fk_campaign_` FOREIGN KEY (`venture_id`) REFERENCES `campaign_venture` (`id`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+    - Fields explanation:
+        - id: Auto-incrementing primary key (int(11))
+        - keyword: The search keyword (varchar(255))
+        - search_volume: Number of searches for the keyword (int(11))
+        - date_created: Timestamp of record creation (datetime(6))
+        - date_updated: Timestamp of last update (datetime(6))
+        - venture_id: Foreign key to campaign_venture table (int(11))
+    - Indexes and Constraints:
+        - Primary key on id
+        - Foreign key constraint on venture_id referencing campaign_venture(id)
+        - Index on venture_id for improved query performance
+164. sso_apiconfig
+165. sso_backend
+166. sso_companylinkedaccount
+167. sso_historicalcompanylinkedaccount
+168. sync_data_api_apitoken
+169. sync_data_api_catalog
+170. sync_data_api_customer
+171. sync_data_api_historicalapitoken
+172. sync_data_api_historicalcatalog
+173. sync_data_api_importproductresult
+174. sync_data_api_product
+175. sync_data_api_team
+176. users_account
+    - Stores information about user accounts
+    - Structure:
+        - id: char(32), Primary Key
+        - first_name: varchar(100), Not Null
+        - last_name: varchar(100), Not Null
+        - phone_number: varchar(20), Nullable
+        - company_id: char(32), Foreign Key to users_company
+        - role_id: int(11), Foreign Key to users_role
+        - user_id: int(11), Foreign Key to auth_user
+        - timezone: varchar(50), Not Null
+        - status: varchar(20), Not Null
+    - Indexes:
+        - role_id
+        - user_id
+        - company_id
+    - Constraints:
+        - Foreign key on company_id referencing users_company(id)
+        - Foreign key on role_id referencing users_role(id)
+        - Foreign key on user_id referencing auth_user(id)
+177. users_brand
+    - Stores information about brands
+    - Structure based on init_dafiti_2020_12_08.sql:
+        CREATE TABLE `users_brand` (
+          `id` char(32) NOT NULL,
+          `name` varchar(100) NOT NULL,
+          `logo` varchar(100) DEFAULT NULL,
+          `date_created` datetime(6) NOT NULL,
+          `date_updated` datetime(6) NOT NULL,
+          PRIMARY KEY (`id`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+    - Fields explanation:
+        - id: Unique identifier for the brand (char(32))
+        - name: Name of the brand (varchar(100))
+        - logo: Path or URL to the brand's logo image (varchar(100), nullable)
+        - date_created: Timestamp of when the brand was created (datetime(6))
+        - date_updated: Timestamp of when the brand was last updated (datetime(6))
+    - Indexes:
+        - Primary key on id
+178. users_branddepartment
+    - Stores information about brand departments
+    - Structure based on init_dafiti_2020_12_08.sql:
+        CREATE TABLE `users_branddepartment` (
+          `id` int(11) NOT NULL AUTO_INCREMENT,
+          `date_created` datetime(6) NOT NULL,
+          `date_updated` datetime(6) NOT NULL,
+          `brand_id` char(32) NOT NULL,
+          `department_id` int(11) NOT NULL,
+          PRIMARY KEY (`id`),
+          UNIQUE KEY `users_branddepartment_brand_id_department_id_c7f4c5c4_uniq` (`brand_id`,`department_id`),
+          KEY `users_branddepartmen_department_id_e4b6a7d4_fk_users_dep` (`department_id`),
+          CONSTRAINT `users_branddepartmen_brand_id_c7c7c9c9_fk_users_bra` FOREIGN KEY (`brand_id`) REFERENCES `users_brand` (`id`),
+          CONSTRAINT `users_branddepartmen_department_id_e4b6a7d4_fk_users_dep` FOREIGN KEY (`department_id`) REFERENCES `users_department` (`id`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+    - Fields explanation:
+        - id: Unique identifier for the brand department (int(11), auto-increment)
+        - date_created: Timestamp of when the brand department was created (datetime(6))
+        - date_updated: Timestamp of when the brand department was last updated (datetime(6))
+        - brand_id: Foreign key to users_brand table (char(32))
+        - department_id: Foreign key to users_department table (int(11))
+    - Indexes:
+        - Primary key on id
+        - Unique key on combination of brand_id and department_id
+        - Foreign key index on department_id
+    - Constraints:
+        - Foreign key on brand_id referencing users_brand(id)
+        - Foreign key on department_id referencing users_department(id)
+179. users_brandventure
+    - Stores information about brand ventures
+    - Structure based on init_dafiti_2020_12_08.sql:
+        CREATE TABLE `users_brandventure` (
+          `id` int(11) NOT NULL AUTO_INCREMENT,
+          `date_created` datetime(6) NOT NULL,
+          `date_updated` datetime(6) NOT NULL,
+          `venture_id` int(11) NOT NULL,
+          `brand_id` char(32) NOT NULL,
+          `catalog_id` int(11) DEFAULT NULL,
+          PRIMARY KEY (`id`),
+          UNIQUE KEY `users_brandventure_venture_id_brand_id_b6af2e5f_uniq` (`venture_id`,`brand_id`),
+          KEY `users_brandventure_venture_id_65f9ca6e_fk_campaign_venture_id` (`venture_id`),
+          KEY `users_brandventure_brand_id_b6af2e5f_fk` (`brand_id`),
+          KEY `users_brandventure_catalog_id_eab9cf91_fk_sponsor_catalog_id` (`catalog_id`),
+          CONSTRAINT `users_brandventure_brand_id_b6af2e5f_fk` FOREIGN KEY (`brand_id`) REFERENCES `users_brand` (`id`),
+          CONSTRAINT `users_brandventure_catalog_id_eab9cf91_fk_sponsor_catalog_id` FOREIGN KEY (`catalog_id`) REFERENCES `sponsor_catalog` (`id`),
+          CONSTRAINT `users_brandventure_venture_id_65f9ca6e_fk_campaign_venture_id` FOREIGN KEY (`venture_id`) REFERENCES `campaign_venture` (`id`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+    - Fields explanation:
+        - id: Unique identifier for the brand venture (int(11), auto-increment)
+        - date_created: Timestamp of when the brand venture was created (datetime(6))
+        - date_updated: Timestamp of when the brand venture was last updated (datetime(6))
+        - venture_id: Foreign key to campaign_venture table (int(11))
+        - brand_id: Foreign key to users_brand table (char(32))
+        - catalog_id: Foreign key to sponsor_catalog table (int(11), nullable)
+    - Indexes:
+        - Primary key on id
+        - Unique key on combination of venture_id and brand_id
+        - Foreign key index on venture_id
+        - Foreign key index on brand_id
+        - Foreign key index on catalog_id
+    - Constraints:
+        - Foreign key on brand_id referencing users_brand(id)
+        - Foreign key on catalog_id referencing sponsor_catalog(id)
+        - Foreign key on venture_id referencing campaign_venture(id)
+180. users_company
+    - Stores information about companies
+    - Structure based on init_dafiti_2020_12_08.sql:
+        CREATE TABLE `users_company` (
+          `id` char(32) NOT NULL,
+          `date_created` datetime(6) NOT NULL,
+          `date_updated` datetime(6) NOT NULL,
+          `name` varchar(254) NOT NULL,
+          `status` varchar(20) NOT NULL,
+          `company_type` varchar(20) NOT NULL,
+          `country_cluster_id` int(11) DEFAULT NULL,
+          `parent_id` char(32) DEFAULT NULL,
+          PRIMARY KEY (`id`),
+          KEY `users_company_country_cluster_id_e115a9b4_fk_users_cou` (`country_cluster_id`),
+          KEY `users_company_parent_id_4ae11057_fk_users_company_id` (`parent_id`),
+          CONSTRAINT `users_company_country_cluster_id_e115a9b4_fk_users_cou` FOREIGN KEY (`country_cluster_id`) REFERENCES `users_countrycluster` (`id`),
+          CONSTRAINT `users_company_parent_id_4ae11057_fk_users_company_id` FOREIGN KEY (`parent_id`) REFERENCES `users_company` (`id`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+    - Fields explanation:
+        - id: Unique identifier for the company (char(32))
+        - date_created: Timestamp of when the company was created (datetime(6))
+        - date_updated: Timestamp of when the company was last updated (datetime(6))
+        - name: Name of the company (varchar(254))
+        - status: Current status of the company (varchar(20))
+        - company_type: Type of the company (varchar(20))
+        - country_cluster_id: Foreign key to users_countrycluster table (int(11))
+        - parent_id: Foreign key to parent company in the same table (char(32))
+    - Indexes:
+        - Primary key on id
+        - Foreign key index on country_cluster_id
+        - Foreign key index on parent_id
+    - Constraints:
+        - Foreign key on country_cluster_id referencing users_countrycluster(id)
+        - Foreign key on parent_id referencing users_company(id) (self-referential)
+181. users_company_brands
+    - Stores the relationship between companies and brands
+    - Structure based on init_dafiti_2020_12_08.sql:
+        CREATE TABLE `users_company_brands` (
+          `id` int(11) NOT NULL AUTO_INCREMENT,
+          `company_id` char(32) NOT NULL,
+          `brand_id` char(32) NOT NULL,
+          PRIMARY KEY (`id`),
+          UNIQUE KEY `users_company_brands_company_id_brand_id_b289b9a1_uniq` (`company_id`,`brand_id`),
+          KEY `users_company_brands_brand_id_6c451fd4_fk_users_brand_id` (`brand_id`),
+          CONSTRAINT `users_company_brands_company_id_6882fa1a_fk_users_company_id` FOREIGN KEY (`company_id`) REFERENCES `users_company` (`id`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+    - Fields explanation:
+        - id: Unique identifier for the company-brand relationship (int(11), auto-increment)
+        - company_id: Foreign key to users_company table (char(32))
+        - brand_id: Foreign key to users_brand table (char(32))
+    - Indexes:
+        - Primary key on id
+        - Unique key on combination of company_id and brand_id
+        - Foreign key index on brand_id
+    - Constraints:
+        - Foreign key on company_id referencing users_company(id)
+    - Uses InnoDB storage engine and UTF-8 character set
+182. users_company_sellers
+    - Stores the relationship between companies and sellers
+    - Structure based on init_dafiti_2020_12_08.sql:
+        CREATE TABLE `users_company_sellers` (
+          `id` int(11) NOT NULL AUTO_INCREMENT,
+          `company_id` char(32) NOT NULL,
+          `seller_id` char(32) NOT NULL,
+          PRIMARY KEY (`id`),
+          UNIQUE KEY `users_company_sellers_company_id_seller_id_b289b9a1_uniq` (`company_id`,`seller_id`),
+          KEY `users_company_sellers_seller_id_6c451fd4_fk_users_seller_id` (`seller_id`),
+          CONSTRAINT `users_company_sellers_company_id_6882fa1a_fk_users_company_id` FOREIGN KEY (`company_id`) REFERENCES `users_company` (`id`),
+          CONSTRAINT `users_company_sellers_seller_id_6c451fd4_fk_users_seller_id` FOREIGN KEY (`seller_id`) REFERENCES `users_seller` (`id`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+    - Fields explanation:
+        - id: Unique identifier for the company-seller relationship (int(11), auto-increment)
+        - company_id: Foreign key to users_company table (char(32))
+        - seller_id: Foreign key to users_seller table (char(32))
+    - Indexes:
+        - Primary key on id
+        - Unique key on combination of company_id and seller_id
+        - Foreign key index on seller_id
+    - Constraints:
+        - Foreign key on company_id referencing users_company(id)
+        - Foreign key on seller_id referencing users_seller(id)
+    - Uses InnoDB storage engine and UTF-8 character set
+183. users_countrycluster
+    - Stores information about country clusters
+    - Structure based on init_dafiti_2020_12_08.sql:
+        CREATE TABLE `users_countrycluster` (
+          `id` char(32) NOT NULL,
+          `name` varchar(100) NOT NULL,
+          `code` varchar(10) NOT NULL,
+          PRIMARY KEY (`id`),
+          UNIQUE KEY `code` (`code`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+    - Fields explanation:
+        - id: Unique identifier for the country cluster (char(32))
+        - name: Name of the country cluster (varchar(100))
+        - code: Unique code for the country cluster (varchar(10))
+    - Indexes:
+        - Primary key on id
+        - Unique key on code
+    - Uses InnoDB storage engine and UTF-8 character set
+184. users_countrycluster_catalogs
+    - Stores the relationship between country clusters and catalogs
+    - Structure based on init_dafiti_2020_12_08.sql:
+        CREATE TABLE `users_countrycluster_catalogs` (
+          `id` int(11) NOT NULL AUTO_INCREMENT,
+          `countrycluster_id` char(32) NOT NULL,
+          `catalog_id` int(11) NOT NULL,
+          PRIMARY KEY (`id`),
+          UNIQUE KEY `users_countrycluster_cat_countrycluster_id_catalo_b289b9a1_uniq` (`countrycluster_id`,`catalog_id`),
+          KEY `users_countrycluster_catalog_id_6c451fd4_fk_sponsor_catalog_id` (`catalog_id`),
+          CONSTRAINT `users_countrycluster_countrycluster_id_6882fa1a_fk_users_cou` FOREIGN KEY (`countrycluster_id`) REFERENCES `users_countrycluster` (`id`),
+          CONSTRAINT `users_countrycluster_catalog_id_6c451fd4_fk_sponsor_catalog_id` FOREIGN KEY (`catalog_id`) REFERENCES `sponsor_catalog` (`id`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+    - Fields explanation:
+        - id: Unique identifier for the country cluster-catalog relationship (int(11), auto-increment)
+        - countrycluster_id: Foreign key to users_countrycluster table (char(32))
+        - catalog_id: Foreign key to sponsor_catalog table (int(11))
+    - Indexes:
+        - Primary key on id
+        - Unique key on combination of countrycluster_id and catalog_id
+        - Foreign key index on catalog_id
+    - Constraints:
+        - Foreign key on countrycluster_id referencing users_countrycluster(id)
+        - Foreign key on catalog_id referencing sponsor_catalog(id)
+    - Uses InnoDB storage engine and UTF-8 character set
+185. users_countrycluster_ventures
+    - Stores the relationship between country clusters and ventures
+    - Structure based on init_dafiti_2020_12_08.sql:
+        CREATE TABLE `users_countrycluster_ventures` (
+          `id` int(11) NOT NULL AUTO_INCREMENT,
+          `countrycluster_id` char(32) NOT NULL,
+          `venture_id` int(11) NOT NULL,
+          PRIMARY KEY (`id`),
+          UNIQUE KEY `users_countrycluster_ven_countrycluster_id_ventur_b289b9a1_uniq` (`countrycluster_id`,`venture_id`),
+          KEY `users_countrycluster_venture_id_6c451fd4_fk_campaign_venture_id` (`venture_id`),
+          CONSTRAINT `users_countrycluster_countrycluster_id_6882fa1a_fk_users_cou` FOREIGN KEY (`countrycluster_id`) REFERENCES `users_countrycluster` (`id`),
+          CONSTRAINT `users_countrycluster_venture_id_6c451fd4_fk_campaign_venture_id` FOREIGN KEY (`venture_id`) REFERENCES `campaign_venture` (`id`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+    - Fields explanation:
+        - id: Unique identifier for the country cluster-venture relationship (int(11), auto-increment)
+        - countrycluster_id: Foreign key to users_countrycluster table (char(32))
+        - venture_id: Foreign key to campaign_venture table (int(11))
+    - Indexes:
+        - Primary key on id
+        - Unique key on combination of countrycluster_id and venture_id
+        - Foreign key index on venture_id
+    - Constraints:
+        - Foreign key on countrycluster_id referencing users_countrycluster(id)
+        - Foreign key on venture_id referencing campaign_venture(id)
+    - Uses InnoDB storage engine and UTF-8 character set
+186. users_currency
+    - Stores information about currencies
+    - Structure based on init_dafiti_2020_12_08.sql:
+        CREATE TABLE `users_currency` (
+          `id` char(32) NOT NULL,
+          `code` varchar(3) NOT NULL,
+          `name` varchar(100) NOT NULL,
+          `symbol` varchar(10) NOT NULL,
+          `decimal_places` int(11) NOT NULL,
+          PRIMARY KEY (`id`),
+          UNIQUE KEY `code` (`code`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+    - Fields explanation:
+        - id: Unique identifier for the currency (char(32))
+        - code: Currency code, e.g., USD, EUR (varchar(3))
+        - name: Full name of the currency (varchar(100))
+        - symbol: Currency symbol (varchar(10))
+        - decimal_places: Number of decimal places for the currency (int(11))
+    - Indexes:
+        - Primary key on id
+        - Unique key on code
+    - Uses InnoDB storage engine and UTF-8 character set
+187. users_currencyconvertrate
+    - Stores currency conversion rates
+    - Structure based on init_dafiti_2020_12_08.sql:
+        CREATE TABLE `users_currencyconvertrate` (
+          `id` char(32) NOT NULL,
+          `from_currency_id` char(32) NOT NULL,
+          `to_currency_id` char(32) NOT NULL,
+          `rate` decimal(20,10) NOT NULL,
+          `date` date NOT NULL,
+          `date_created` datetime(6) NOT NULL,
+          `date_updated` datetime(6) NOT NULL,
+          PRIMARY KEY (`id`),
+          UNIQUE KEY `users_currencyconvertrate_from_currency_id_to_curr_d4eac3d6_uniq` (`from_currency_id`,`to_currency_id`,`date`),
+          KEY `users_currencyconver_to_currency_id_b83e0e3d_fk_users_cur` (`to_currency_id`),
+          CONSTRAINT `users_currencyconver_from_currency_id_7bf53ea1_fk_users_cur` FOREIGN KEY (`from_currency_id`) REFERENCES `users_currency` (`id`),
+          CONSTRAINT `users_currencyconver_to_currency_id_b83e0e3d_fk_users_cur` FOREIGN KEY (`to_currency_id`) REFERENCES `users_currency` (`id`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+    - Fields explanation:
+        - id: Unique identifier for the currency conversion rate (char(32))
+        - from_currency_id: Foreign key to the source currency in users_currency table (char(32))
+        - to_currency_id: Foreign key to the target currency in users_currency table (char(32))
+        - rate: The conversion rate from source to target currency (decimal(20,10))
+        - date: The date for which the conversion rate is valid (date)
+        - date_created: Timestamp of when the record was created (datetime(6))
+        - date_updated: Timestamp of when the record was last updated (datetime(6))
+    - Indexes:
+        - Primary key on id
+        - Unique key on combination of from_currency_id, to_currency_id, and date
+        - Foreign key index on to_currency_id
+    - Constraints:
+        - Foreign key on from_currency_id referencing users_currency(id)
+        - Foreign key on to_currency_id referencing users_currency(id)
+    - Uses InnoDB storage engine and UTF-8 character set
+188. users_department
+    - Stores information about departments
+    - Structure based on init_dafiti_2020_12_08.sql:
+        CREATE TABLE `users_department` (
+          `id` char(32) NOT NULL,
+          `name` varchar(100) NOT NULL,
+          `company_id` char(32) NOT NULL,
+          PRIMARY KEY (`id`),
+          KEY `users_department_company_id_a0fe90e0_fk_users_company_id` (`company_id`),
+          CONSTRAINT `users_department_company_id_a0fe90e0_fk_users_company_id` FOREIGN KEY (`company_id`) REFERENCES `users_company` (`id`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+    - Fields explanation:
+        - id: Unique identifier for the department (char(32))
+        - name: Name of the department (varchar(100))
+        - company_id: Foreign key to the company in users_company table (char(32))
+    - Indexes:
+        - Primary key on id
+        - Foreign key index on company_id
+    - Constraints:
+        - Foreign key on company_id referencing users_company(id)
+    - Uses InnoDB storage engine and UTF-8 character set
+189. users_historicalaccount
+    - Stores historical records of account data for auditing purposes
+    - Structure based on init_dafiti_2020_12_08.sql:
+        CREATE TABLE `users_historicalaccount` (
+          `id` char(32) NOT NULL,
+          `password` varchar(128) NOT NULL,
+          `last_login` datetime(6) DEFAULT NULL,
+          `is_superuser` tinyint(1) NOT NULL,
+          `username` varchar(150) NOT NULL,
+          `first_name` varchar(30) NOT NULL,
+          `last_name` varchar(150) NOT NULL,
+          `email` varchar(254) NOT NULL,
+          `is_staff` tinyint(1) NOT NULL,
+          `is_active` tinyint(1) NOT NULL,
+          `date_joined` datetime(6) NOT NULL,
+          `phone` varchar(20) DEFAULT NULL,
+          `title` varchar(20) DEFAULT NULL,
+          `history_id` int(11) NOT NULL AUTO_INCREMENT,
+          `history_date` datetime(6) NOT NULL,
+          `history_change_reason` varchar(100) DEFAULT NULL,
+          `history_type` varchar(1) NOT NULL,
+          `company_id` char(32) DEFAULT NULL,
+          `history_user_id` char(32) DEFAULT NULL,
+          `role_id` int(11) DEFAULT NULL,
+          PRIMARY KEY (`history_id`),
+          KEY `users_historicalaccount_id_7a2c1b6f` (`id`),
+          KEY `users_historicalaccount_username_4d6a8f22` (`username`),
+          KEY `users_historicalaccount_company_id_c8d3d4e7` (`company_id`),
+          KEY `users_historicalacco_history_user_id_a8f28d5b_fk_users_acc` (`history_user_id`),
+          KEY `users_historicalaccount_role_id_c1d9f9e7` (`role_id`),
+          CONSTRAINT `users_historicalacco_history_user_id_a8f28d5b_fk_users_acc` FOREIGN KEY (`history_user_id`) REFERENCES `users_account` (`id`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+    - Fields explanation:
+        - id: Original account ID (char(32))
+        - password: Hashed password (varchar(128))
+        - last_login: Timestamp of last login (datetime(6), nullable)
+        - is_superuser: Boolean indicating superuser status (tinyint(1))
+        - username: Unique username (varchar(150))
+        - first_name: User's first name (varchar(30))
+        - last_name: User's last name (varchar(150))
+        - email: User's email address (varchar(254))
+        - is_staff: Boolean indicating staff status (tinyint(1))
+        - is_active: Boolean indicating if the account is active (tinyint(1))
+        - date_joined: Timestamp of account creation (datetime(6))
+        - phone: User's phone number (varchar(20), nullable)
+        - title: User's title (varchar(20), nullable)
+        - history_id: Unique identifier for the historical record (int(11), auto-incrementing)
+        - history_date: Timestamp of when the historical record was created (datetime(6))
+        - history_change_reason: Reason for the change (varchar(100), nullable)
+        - history_type: Type of change (varchar(1))
+        - company_id: Foreign key to the company in users_company table (char(32), nullable)
+        - history_user_id: Foreign key to the user who made the change (char(32), nullable)
+        - role_id: Foreign key to the role in users_role table (int(11), nullable)
+    - Indexes:
+        - Primary key on history_id
+        - Index on id
+        - Index on username
+        - Index on company_id
+        - Foreign key index on history_user_id
+        - Index on role_id
+    - Constraints:
+        - Foreign key on history_user_id referencing users_account(id)
+    - Uses InnoDB storage engine and UTF-8 character set
+190. users_historicalcompany
+    - Stores historical records of company data for auditing purposes
+    - Structure based on init_dafiti_2020_12_08.sql:
+        CREATE TABLE `users_historicalcompany` (
+          `id` char(32) NOT NULL,
+          `name` varchar(100) NOT NULL,
+          `country_code` varchar(10) NOT NULL,
+          `address` longtext NOT NULL,
+          `address2` longtext,
+          `postal_code` varchar(20) DEFAULT NULL,
+          `timezone` varchar(50) DEFAULT NULL,
+          `registration_no` varchar(100) DEFAULT NULL,
+          `authorized_name` varchar(100) DEFAULT NULL,
+          `gfg_company` tinyint(1) NOT NULL,
+          `stripe_id` varchar(50) DEFAULT NULL,
+          `history_id` int(11) NOT NULL AUTO_INCREMENT,
+          `history_date` datetime(6) NOT NULL,
+          `history_change_reason` varchar(100) DEFAULT NULL,
+          `history_type` varchar(1) NOT NULL,
+          `contact_id` char(32) DEFAULT NULL,
+          `history_user_id` char(32) DEFAULT NULL,
+          PRIMARY KEY (`history_id`),
+          KEY `users_historicalcompany_id_d4d5c9b3` (`id`),
+          KEY `users_historicalcompany_contact_id_c9a9c5f7` (`contact_id`),
+          KEY `users_historicalcomp_history_user_id_e5b5e7b0_fk_users_acc` (`history_user_id`),
+          CONSTRAINT `users_historicalcomp_history_user_id_e5b5e7b0_fk_users_acc` FOREIGN KEY (`history_user_id`) REFERENCES `users_account` (`id`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+    - Fields explanation:
+        - id: Original company ID (char(32))
+        - name: Company name (varchar(100))
+        - country_code: Company's country code (varchar(10))
+        - address: Company's primary address (longtext)
+        - address2: Company's secondary address (longtext, nullable)
+        - postal_code: Company's postal code (varchar(20), nullable)
+        - timezone: Company's timezone (varchar(50), nullable)
+        - registration_no: Company's registration number (varchar(100), nullable)
+        - authorized_name: Name of authorized person (varchar(100), nullable)
+        - gfg_company: Boolean indicating if it's a GFG company (tinyint(1))
+        - stripe_id: Stripe payment ID (varchar(50), nullable)
+        - history_id: Unique identifier for the historical record (int(11), auto-incrementing)
+        - history_date: Timestamp of when the historical record was created (datetime(6))
+        - history_change_reason: Reason for the change (varchar(100), nullable)
+        - history_type: Type of change (varchar(1))
+        - contact_id: Foreign key to the contact in users_account table (char(32), nullable)
+        - history_user_id: Foreign key to the user who made the change (char(32), nullable)
+    - Indexes:
+        - Primary key on history_id
+        - Index on id
+        - Index on contact_id
+        - Foreign key index on history_user_id
+    - Constraints:
+        - Foreign key on history_user_id referencing users_account(id)
+    - Uses InnoDB storage engine and UTF-8 character set
+191. users_historicalcurrencyconvertrate
+    - Stores historical records of currency conversion rates for auditing purposes
+    - Structure based on init_dafiti_2020_12_08.sql:
+        CREATE TABLE `users_historicalcurrencyconvertrate` (
+          `id` int(11) NOT NULL,
+          `from_currency` varchar(3) NOT NULL,
+          `to_currency` varchar(3) NOT NULL,
+          `rate` decimal(20,10) NOT NULL,
+          `date` date NOT NULL,
+          `history_id` int(11) NOT NULL AUTO_INCREMENT,
+          `history_date` datetime(6) NOT NULL,
+          `history_change_reason` varchar(100) DEFAULT NULL,
+          `history_type` varchar(1) NOT NULL,
+          `history_user_id` char(32) DEFAULT NULL,
+          PRIMARY KEY (`history_id`),
+          KEY `users_historicalcurr_history_user_id_a6e1e9f3_fk_users_acc` (`history_user_id`),
+          KEY `users_historicalcurrencyconvertrate_id_4c5f9d2c` (`id`),
+          CONSTRAINT `users_historicalcurr_history_user_id_a6e1e9f3_fk_users_acc` FOREIGN KEY (`history_user_id`) REFERENCES `users_account` (`id`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+    - Fields explanation:
+        - id: Original currency convert rate ID (int(11))
+        - from_currency: Source currency code (varchar(3))
+        - to_currency: Target currency code (varchar(3))
+        - rate: Conversion rate (decimal(20,10))
+        - date: Date of the conversion rate (date)
+        - history_id: Unique identifier for the historical record (int(11), auto-incrementing)
+        - history_date: Timestamp of when the historical record was created (datetime(6))
+        - history_change_reason: Reason for the change (varchar(100), nullable)
+        - history_type: Type of change (varchar(1))
+        - history_user_id: Foreign key to the user who made the change (char(32), nullable)
+    - Indexes:
+        - Primary key on history_id
+        - Index on id
+        - Foreign key index on history_user_id
+    - Constraints:
+        - Foreign key on history_user_id referencing users_account(id)
+    - Uses InnoDB storage engine and UTF-8 character set
+192. users_historicaluser
+    - Stores historical records of user data for auditing purposes
+    - Structure based on init_dafiti_2020_12_08.sql:
+        CREATE TABLE `users_historicaluser` (
+          `id` int(11) NOT NULL,
+          `password` varchar(128) NOT NULL,
+          `last_login` datetime(6) DEFAULT NULL,
+          `is_superuser` tinyint(1) NOT NULL,
+          `username` varchar(150) NOT NULL,
+          `first_name` varchar(30) NOT NULL,
+          `last_name` varchar(150) NOT NULL,
+          `email` varchar(254) NOT NULL,
+          `is_staff` tinyint(1) NOT NULL,
+          `is_active` tinyint(1) NOT NULL,
+          `date_joined` datetime(6) NOT NULL,
+          `history_id` int(11) NOT NULL AUTO_INCREMENT,
+          `history_date` datetime(6) NOT NULL,
+          `history_change_reason` varchar(100) DEFAULT NULL,
+          `history_type` varchar(1) NOT NULL,
+          `history_user_id` char(32) DEFAULT NULL,
+          PRIMARY KEY (`history_id`),
+          KEY `users_historicaluser_id_7a76e0f7` (`id`),
+          KEY `users_historicaluser_username_4d6a8f22` (`username`),
+          KEY `users_historicaluser_history_user_id_c4e3c1a4_fk_users_acc` (`history_user_id`),
+          CONSTRAINT `users_historicaluser_history_user_id_c4e3c1a4_fk_users_acc` FOREIGN KEY (`history_user_id`) REFERENCES `users_account` (`id`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+    - Fields explanation:
+        - id: Original user ID (int(11))
+        - password: Hashed password (varchar(128))
+        - last_login: Timestamp of last login (datetime(6), nullable)
+        - is_superuser: Boolean indicating if user is a superuser (tinyint(1))
+        - username: User's username (varchar(150))
+        - first_name: User's first name (varchar(30))
+        - last_name: User's last name (varchar(150))
+        - email: User's email address (varchar(254))
+        - is_staff: Boolean indicating if user is staff (tinyint(1))
+        - is_active: Boolean indicating if user account is active (tinyint(1))
+        - date_joined: Timestamp of when user joined (datetime(6))
+        - history_id: Unique identifier for the historical record (int(11), auto-incrementing)
+        - history_date: Timestamp of when the historical record was created (datetime(6))
+        - history_change_reason: Reason for the change (varchar(100), nullable)
+        - history_type: Type of change (varchar(1))
+        - history_user_id: Foreign key to the user who made the change (char(32), nullable)
+    - Indexes:
+        - Primary key on history_id
+        - Index on id
+        - Index on username
+        - Foreign key index on history_user_id
+    - Constraints:
+        - Foreign key on history_user_id referencing users_account(id)
+    - Uses InnoDB storage engine and UTF-8 character set
+193. users_invitation
+194. users_notification
+195. users_notificationcategory
+196. users_onboarding
+197. users_onboardingaction
+198. users_passwordsetuprequest
+199. users_role
+    - Stores information about user roles
+    - Structure based on init_dafiti_2020_12_08.sql:
+        CREATE TABLE `users_role` (
+          `id` int(11) NOT NULL AUTO_INCREMENT,
+          `name` varchar(20) NOT NULL,
+          PRIMARY KEY (`id`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+    - Fields explanation:
+        - id: Unique identifier for the role (int(11), auto-incrementing)
+        - name: Name of the role (varchar(20))
+    - Indexes:
+        - Primary key on id
+    - Uses InnoDB storage engine and UTF-8 character set
+    - Pre-defined roles:
+        - OWNER
+        - STAFF
+        - MANAGER
+        - ADMIN
+200. users_securetoken
+201. users_seller
+    - Stores information about sellers
+    - Structure based on init_dafiti_2020_12_08.sql:
+        CREATE TABLE `users_seller` (
+          `id` char(32) NOT NULL,
+          `name` varchar(100) NOT NULL,
+          `country_code` varchar(10) NOT NULL,
+          `address` longtext NOT NULL,
+          `address2` longtext,
+          `postal_code` varchar(20) DEFAULT NULL,
+          `contact_id` char(32) NOT NULL,
+          `timezone` varchar(50) DEFAULT NULL,
+          `registration_no` varchar(100) DEFAULT NULL,
+          `authorized_name` varchar(100) DEFAULT NULL,
+          `gfg_company` tinyint(1) NOT NULL,
+          `stripe_id` varchar(50) DEFAULT NULL,
+          PRIMARY KEY (`id`),
+          KEY `users_seller_contact_id_84a93f12_fk_users_account_id` (`contact_id`),
+          CONSTRAINT `users_seller_contact_id_84a93f12_fk_users_account_id` FOREIGN KEY (`contact_id`) REFERENCES `users_account` (`id`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+    - Fields explanation:
+        - id: Unique identifier for the seller (char(32))
+        - name: Name of the seller (varchar(100))
+        - country_code: Country code of the seller (varchar(10))
+        - address: Primary address of the seller (longtext)
+        - address2: Secondary address of the seller (longtext, nullable)
+        - postal_code: Postal code of the seller (varchar(20), nullable)
+        - contact_id: Foreign key to users_account table (char(32))
+        - timezone: Timezone of the seller (varchar(50), nullable)
+        - registration_no: Registration number of the seller (varchar(100), nullable)
+        - authorized_name: Authorized name for the seller (varchar(100), nullable)
+        - gfg_company: Boolean indicating if it's a GFG company (tinyint(1))
+        - stripe_id: Stripe ID for the seller (varchar(50), nullable)
+    - Indexes:
+        - Primary key on id
+        - Foreign key index on contact_id
+    - Constraints:
+        - Foreign key on contact_id referencing users_account(id)
+    - Uses InnoDB storage engine and UTF-8 character set
+202. users_seller_brand_ventures
+    - Stores associations between sellers, brands, and ventures
+    - Structure based on init_dafiti_2020_12_08.sql:
+        CREATE TABLE `users_seller_brand_ventures` (
+          `id` int(11) NOT NULL AUTO_INCREMENT,
+          `seller_id` char(32) NOT NULL,
+          `brand_id` char(32) NOT NULL,
+          PRIMARY KEY (`id`),
+          UNIQUE KEY `users_seller_brand_ventures_seller_id_brand_id_b289b9a1_uniq` (`seller_id`,`brand_id`),
+          KEY `users_seller_brand_ventures_brand_id_6c451fd4_fk_users_brand_id` (`brand_id`),
+          CONSTRAINT `users_seller_brand_ventures_seller_id_6882fa1a_fk_users_seller_id` FOREIGN KEY (`seller_id`) REFERENCES `users_seller` (`id`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+    - Fields explanation:
+        - id: Unique identifier for the association (int(11), auto-incrementing)
+        - seller_id: Foreign key referencing the users_seller table (char(32))
+        - brand_id: Foreign key referencing the users_brand table (char(32))
+    - Indexes:
+        - Primary key on id
+        - Unique key on combination of seller_id and brand_id
+        - Foreign key index on brand_id
+    - Constraints:
+        - Foreign key on seller_id referencing users_seller(id)
+    - Uses InnoDB storage engine and UTF-8 character set
+203. waffle_flag
+204. waffle_flag_groups
+205. waffle_flag_users
+206. waffle_sample
+    - Stores information about feature flag samples
+    - Structure based on init_dafiti_2020_12_08.sql:
+        CREATE TABLE `waffle_sample` (
+          `id` int(11) NOT NULL AUTO_INCREMENT,
+          `name` varchar(100) NOT NULL,
+          `percent` decimal(4,1) NOT NULL,
+          `note` longtext NOT NULL,
+          `created` datetime(6) NOT NULL,
+          `modified` datetime(6) NOT NULL,
+          PRIMARY KEY (`id`),
+          UNIQUE KEY `name` (`name`),
+          KEY `waffle_sample_created_76198bd5` (`created`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+    - Fields explanation:
+        - id: Unique identifier for the sample (int(11), auto-incrementing)
+        - name: Name of the sample (varchar(100), unique)
+        - percent: Percentage of users to include in the sample (decimal(4,1))
+        - note: Additional notes or description (longtext)
+        - created: Timestamp of when the sample was created (datetime(6))
+        - modified: Timestamp of when the sample was last modified (datetime(6))
+    - Indexes:
+        - Primary key on id
+        - Unique key on name
+        - Index on created field for faster querying
+    - Uses InnoDB storage engine and UTF-8 character set
+
+207. waffle_switch
+    - Stores information about feature switches
+    - Structure based on init_dafiti_2020_12_08.sql:
+        CREATE TABLE `waffle_switch` (
+          `id` int(11) NOT NULL AUTO_INCREMENT,
+          `name` varchar(100) NOT NULL,
+          `active` tinyint(1) NOT NULL,
+          `note` longtext NOT NULL,
+          `created` datetime(6) NOT NULL,
+          `modified` datetime(6) NOT NULL,
+          PRIMARY KEY (`id`),
+          UNIQUE KEY `name` (`name`),
+          KEY `waffle_switch_created_c004e77e` (`created`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+    - Fields explanation:
+        - id: Unique identifier for the switch (int(11), auto-incrementing)
+        - name: Name of the switch (varchar(100), unique)
+        - active: Boolean indicating if the switch is active (tinyint(1))
+        - note: Additional notes or description (longtext)
+        - created: Timestamp of when the switch was created (datetime(6))
+        - modified: Timestamp of when the switch was last modified (datetime(6))
+    - Indexes:
+        - Primary key on id
+        - Unique key on name
+        - Index on created field for faster querying
+    - Uses InnoDB storage engine and Latin1 character set
+
+## Venture id:
+
+1. sg - Singapore
+2. my - Malaysia
+3. hk - Hong Kong
+4. tw - Taiwan
+5. id - Indonesia
+6. ph - Philippines
+
+
+## Example queries:
+
+- Example 1: query to get recent sales data:
+This query is designed to fetch recent, valid sales data from the report_sale table. It selects key information about each sale, including the ad that led to the sale, the product sold, when it was sold, and its value.
+
+The query filters out any sales that have been marked as rejected, returned, cancelled, or invalid, ensuring we only get data for completed, valid sales. It also limits the data to sales that occurred within the last two months, providing a recent snapshot of sales activity.
+
+The year and month are extracted separately from the event_time, which can be useful for grouping and analyzing sales data by time periods.
+
+query = f"""
+    -- This query retrieves sales data for valid, non-rejected, non-returned, non-cancelled, and non-invalid sales from the last 2 months
+    SELECT 
+        displayed_ad_id,  -- Identifier for the displayed advertisement
+        sku,              -- Stock Keeping Unit, unique identifier for a product
+        YEAR(event_time) as year,  -- Extract the year from the event timestamp
+        LPAD(MONTH(event_time), 2, '0') as month,  -- Extract the month and pad with leading zero if necessary
+        event_time,       -- Timestamp of the sale event
+        value_main_currency  -- Sale value in the main currency
+    FROM 
+        report_sale
+    WHERE 
+        is_valid = 1  -- Only include valid sales
+        AND (is_rejected != 1 OR is_rejected IS NULL)  -- Exclude rejected sales
+        AND (is_returned != 1 OR is_returned IS NULL)  -- Exclude returned sales
+        AND (is_cancelled != 1 OR is_cancelled IS NULL)  -- Exclude cancelled sales
+        AND (is_invalid != 1 OR is_invalid IS NULL)  -- Exclude invalid sales
+        AND event_time >= DATE_SUB(CURDATE(), INTERVAL 2 MONTH)  -- Only include sales from the last 2 months
+;"""
+
+2. Example 2: Query product_seller_ids of campaign_ids
+
+    query = f"""
+    -- This query retrieves information about active campaigns, ad sets, and associated products
+    SELECT 
+        campaign.supplier_id as supplier_id,  -- Identifier for the supplier
+        adset.campaign_id,                    -- Identifier for the campaign
+        product_seller_ids                    -- Identifier for sellers
+    FROM 
+        (
+          -- Subquery to get ad information
+          SELECT name, ads_set_id, product_seller_ids
+          FROM sponsor_ad
+        ) as ad 
+    INNER JOIN
+        (
+          -- Subquery to get ad set information with specific statuses
+          SELECT id, campaign_id, name, status
+          FROM sponsor_adset
+          WHERE status IN ('PENDING_FOR_APPROVAL', 'REJECTED', 'DELIVERING')
+          OR (status = 'SCHEDULED' AND DATEDIFF(start_date, NOW()) = 0)  -- Scheduled to start today
+          OR (status = 'NOT_DELIVERING' AND DATEDIFF(NOW(), stop_date) < 7 )  -- Stopped delivering within the last week
+        ) as adset
+        ON adset.id = ad.ads_set_id
+    INNER JOIN sponsor_campaign as campaign 
+        ON campaign.id = adset.campaign_id
+    INNER JOIN sponsor_targeting as targeting 
+        ON targeting.campaign_id = campaign.id 
+        AND catalog_id = {venture_id}
+    ;"""
+
+3. Example 3: query categories, landing_url, brand_name of banner ads
+query = f"""SELECT
+  DISTINCT bannerad.ads_id AS adsid,     -- Select distinct ad IDs to avoid duplicates
+  brand.name AS brand_name,              -- Get the brand name associated with the campaign
+  ad.banner_category_ids,                -- Retrieve the categories the ad belongs to
+  bannerad.landing_url                   -- Get the URL where the banner ad redirects
+FROM sponsor_campaign AS campaign         -- Main table containing campaign data
+INNER JOIN users_brand AS brand           -- Join with the brand table to get brand details
+  ON brand.id = campaign.brand_id         -- Match brand_id in campaign to id in users_brand
+INNER JOIN sponsor_targeting AS targeting -- Join with the targeting table to filter by target criteria
+  ON targeting.campaign_id = campaign.id  -- Match campaign_id in targeting to campaign id
+INNER JOIN sponsor_targetingkeyword AS keyword -- Join with targeting keywords for additional targeting
+  ON keyword.targeting_id = targeting.id  -- Match targeting id to get relevant keywords
+INNER JOIN sponsor_adset AS adset         -- Join with adset table to group related ads under sets
+  ON adset.campaign_id = campaign.id      -- Match campaign_id in adset to campaign id
+INNER JOIN sponsor_ad AS ad               -- Join with ad table for ad-specific details
+  ON ad.ads_set_id = adset.id             -- Match adset id in ads to adset
+INNER JOIN sponsor_bannerad AS bannerad   -- Join with banner ads table for banner-specific details
+  ON bannerad.ads_id = ad.id              -- Match ad id in banner ad to the ad id
+WHERE ad.ads_type = 'BANNER'              -- Filter for ads that are specifically banners
+  AND adset.status = 'DELIVERING'         -- Ensure that the adset is actively delivering
+  AND targeting.catalog_id = {config.venture_id}; -- Filter by a specific venture ID
+  """
+4. Example 4: query number of impressions, clicks, cost, revenue, purchases, ROAS, CPC, CTR, Conv of campaign on each page_type
+query = f"""
+SELECT
+    imp.venture_name,                              -- The name of the venture (business) running the campaign
+    imp.venture_id,                                -- The ID of the venture
+    imp.campaign_id,                               -- The ID of the campaign being analyzed
+    imp.page_type,                                 -- The type of page where the impressions occurred (e.g., home, product)
+    cli.clicks,                                    -- The number of clicks recorded from the campaign
+    imp.impressions,                               -- The number of impressions the campaign received
+    IFNULL(costs.cost, 0) AS costs,                -- The cost of the campaign, or 0 if there is no cost data
+    IFNULL(purchases.revenue, 0) AS revenue,       -- The revenue generated by purchases, or 0 if no purchases were made
+    IFNULL(purchases.purchases, 0) AS purchases,   -- The number of purchases made through the campaign, or 0 if none
+    IFNULL((IFNULL(purchases.revenue, 0) / costs.cost), 0) AS ROAS, -- Return on Ad Spend (ROAS), calculated as revenue divided by costs
+    IFNULL((IFNULL(costs.cost, 0) / cli.clicks), 0) AS CPC,  -- Cost Per Click (CPC), calculated as cost divided by clicks
+    IFNULL((cli.clicks / imp.impressions), 0) * 100 AS CTR,  -- Click-Through Rate (CTR), calculated as clicks divided by impressions
+    IFNULL((IFNULL(purchases.purchases, 0) / cli.clicks), 0) * 100 AS Conv -- Conversion rate, calculated as purchases divided by clicks
+FROM (
+    SELECT
+        sum(`value`) AS impressions,               -- Total number of impressions for each campaign
+        venture_id,                                -- The ID of the venture
+        venture_name,                              -- The name of the venture
+        campaign_id,                               -- The ID of the campaign
+        page_type                                  -- The type of page where impressions were made
+    FROM
+      `report_impression`                          -- Data source: report_impression table
+    WHERE
+        `campaign_type` = 'SPONSOR' AND            -- Filter for 'SPONSOR' type campaigns
+        DATEDIFF(now(), `event_time`) < 14 AND     -- Only include events from the last 14 days
+        venture_id = {config.venture_id}           -- Filter by a specific venture ID (dynamic)
+    GROUP BY
+        venture_name, venture_id, campaign_id, page_type
+    ) AS imp
+LEFT JOIN (
+    SELECT
+        sum(`value`) AS clicks,                    -- Total number of clicks for each campaign
+        campaign_id,                               -- The ID of the campaign
+        page_type                                  -- The type of page where clicks were made
+    FROM
+        `report_click`                             -- Data source: report_click table
+    WHERE
+        `campaign_type` = 'SPONSOR' AND            -- Filter for 'SPONSOR' type campaigns
+        DATEDIFF(now(), `event_time`) < 14         -- Only include events from the last 14 days
+    GROUP BY
+        campaign_id, page_type
+    ) AS cli ON imp.campaign_id = cli.campaign_id AND imp.page_type = cli.page_type
+LEFT JOIN (
+    SELECT
+        sum(`value`) AS COST,                      -- Total cost for each campaign
+        campaign_id,                               -- The ID of the campaign
+        page_type                                  -- The type of page associated with the campaign
+    FROM
+        `report_cost`                              -- Data source: report_cost table
+    WHERE
+        `campaign_type` = 'SPONSOR' AND            -- Filter for 'SPONSOR' type campaigns
+        DATEDIFF(now(), `event_time`) < 14         -- Only include events from the last 14 days
+    GROUP BY
+        campaign_id, page_type
+    ) AS costs ON imp.campaign_id = costs.campaign_id AND imp.page_type = costs.page_type
+LEFT JOIN (
+    SELECT DISTINCT
+        count(`purchase_order`) AS purchases,      -- Total number of purchases for each campaign
+        sum(`value` * `venture_currency_rate`)  AS revenue, -- Total revenue for each campaign
+        campaign_id,                               -- The ID of the campaign
+        page_type                                  -- The type of page associated with the campaign
+    FROM
+        `report_sale`                              -- Data source: report_sale table
+    WHERE
+        is_valid = 1                               -- Only valid sales
+        AND (is_rejected != 1 OR is_rejected IS NULL) -- Sales that are not rejected
+        AND (is_returned != 1 OR is_returned IS NULL) -- Sales that are not returned
+        AND (is_cancelled != 1 OR is_cancelled IS NULL) -- Sales that are not cancelled
+        AND (is_invalid != 1 OR is_invalid IS NULL) -- Sales that are not marked as invalid
+        AND `campaign_type` = 'SPONSOR'            -- Filter for 'SPONSOR' type campaigns
+        AND (conversion_type IN ('DIRECTNESS', 'NEW_TO_BRAND') OR -- Only directness or new-to-brand conversions
+             (touch_point_type = 'CLICK' AND attribution_window <= 14)) -- or clicks within a 14-day window
+        AND DATEDIFF(now(), `event_time`) < 14     -- Only include events from the last 14 days
+    GROUP BY
+        campaign_id, page_type
+    ) AS purchases ON costs.campaign_id = purchases.campaign_id AND costs.page_type = purchases.page_type
+ORDER BY
+    imp.venture_name;                              -- Order the results by venture name
+"""
+5. Example 5: query ads sale in 30 days
+query_sale = f"""
+    SELECT
+        venture_id,                                -- The ID of the venture (business) where the sale occurred
+        sku                                        -- The Stock Keeping Unit (SKU) associated with the sale
+    FROM
+        `report_sale`                              -- Data source: report_sale table, which stores sales information
+    WHERE
+        is_valid = 1                               -- Only include valid sales
+        AND DATEDIFF(now(), `event_time`) < 30     -- Only include sales that occurred in the last 30 days
+        AND (conversion_type = 'DIRECTNESS' OR     -- Include sales with 'DIRECTNESS' conversion type OR
+            (touch_point_type = 'CLICK' AND attribution_window <= 14)) -- Sales triggered by a click within a 14-day attribution window
+        AND sku IS NOT NULL                        -- Ensure that the SKU is not NULL
+        AND venture_id = {config.venture_id};      -- Filter by a specific venture ID (dynamic based on config)
+"""
+
+6. Example 6: query all active skus with adset, ad, brand, company, catalog, campaign, sku
+query_sku = f"""
+SELECT
+    sku.sku,                                    -- Select the SKU (Stock Keeping Unit) associated with the product
+    company.name AS company_name,               -- Select the name of the company (supplier) associated with the campaign
+    -- original_seller_ids,                     -- (Commented out) Could potentially select original seller IDs if needed
+    brand.name AS brand_name,                   -- Select the brand name associated with the SKU
+    catalog.id AS venture_code,                 -- Select the venture (catalog) ID associated with the SKU
+    campaign.id AS campaign_id,                 -- Select the campaign ID associated with the SKU and campaign
+    adset.name AS adset_name,                   -- Select the name of the ad set containing the SKU
+    ad.name AS ad_name,                         -- Select the name of the ad containing the SKU
+    ad.ads_type                                 -- Select the ad type (e.g., banner, video, etc.)
+FROM
+    ads_live.sponsor_skuattribute AS sku        -- Data source: sponsor_skuattribute table that stores SKU attributes
+INNER JOIN
+    users_brand AS brand ON sku.brand_id = brand.id AND sku.status = 'ACTIVE' -- Join the brand table to get brand details for active SKUs
+INNER JOIN
+    sponsor_catalog AS catalog ON sku.catalog_id = catalog.id AND catalog.id = {config.venture_id} -- Join the catalog to filter by venture (specific venture ID)
+INNER JOIN
+    ads_live.sponsor_ad AS ad ON sku.ads_id = ad.id -- Join the sponsor_ad table to get details of ads associated with SKUs
+INNER JOIN
+    ads_live.sponsor_adset AS adset ON ad.ads_set_id = adset.id -- Join the sponsor_adset table to group the ads into ad sets
+INNER JOIN
+    ads_live.sponsor_campaign AS campaign ON campaign.id = adset.campaign_id -- Join the sponsor_campaign table to link the ad set to the campaign
+INNER JOIN
+    ads_live.users_company AS company ON company.id = campaign.supplier_id -- Join the users_company table to link the campaign with the company (supplier)
+WHERE
+    (adset.status = 'DELIVERING') OR            -- Filter for ad sets that are actively delivering
+    (DATEDIFF(adset.start_date, NOW()) BETWEEN 0 AND 2) OR -- Filter for ad sets that have started within the last 2 days
+    (DATEDIFF(adset.stop_date, NOW()) BETWEEN -2 AND 0);  -- Filter for ad sets that have ended in the last 2 days
+"""
