@@ -82,5 +82,9 @@ flowchart TD
 
 ## Warning:
 
-- Query can be very big, that can cause out of memory error.
-- Query can be wrong.
+- Query can be very big, that can cause out of memory error -> only support 100 rows.
+- Query can be wrong -> enrich the validation/test dataset.
+- The system can only answer questions that have been trained on -> enrich the training dataset.
+Because the number of topics are finite, we can cover 99% of topics by add more examples.
+
+
