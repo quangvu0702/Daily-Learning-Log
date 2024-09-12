@@ -69,15 +69,7 @@ When we have most common questions, our system will be able to answer 99% of que
 
 This development cycle ensures a systematic approach to building and improving the Q&A system over SQL data, with a focus on comprehensive documentation and continuous refinement.
 
-
 ![alt text](image-1.png)
-
-flowchart TD
-    A[Create tables description] --> |Collect common queries| B[Generate example questions]
-    B --> C[Develop SQL queries]
-    C --> |Provide many examples| D[Implement / deploy the Q&A system]
-    D --> E[Collect questions]
-    E --> |Add more question, query examples| B
 
 
 ## Warning:
