@@ -57,12 +57,18 @@ When we have most common questions, our system will be able to answer 99% of que
    - Implement the database interaction layer
    - Build the response generation component
 
-5. Collect questions:
+5. Test the system:
+   - Create validation dataset
+   - Use validation dataset to test the system
+   - Analyze performance and accuracy
+   - Refine the system based on test results
+
+6. Collect questions:
    - Use example questions to test the system
    - Analyze performance and accuracy
    - Refine the system based on test results
 
-6. Expand and iterate:
+7. Expand and iterate:
    - Continuously add new example questions and queries
    - Update `tables.txt` as the database schema evolves
    - Regularly retrain and improve the Q&A model
