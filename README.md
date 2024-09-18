@@ -51,12 +51,15 @@
 - [Build a Question/Answering system over SQL data](QA_SQL/README.md) 
 
 ## Sep 18, 2024:
+
 ### Build a Question/Answering system over SQL data:
 - add 20 popular examples.
+
 ### Build a Bond with Your Children
 - Spend 20 minutes a day with them.
 - Engage in an activity together.
 - Avoid comments, questions, or giving directions.
+- Instead of telling your children they're smart, encourage them to work hard and embrace challenges. It teaches them that effort and perseverance are the keys to growth.
 
 ## TODO
 ### [Neural and Non-Neural AI, Reasoning, Transformers, and LSTMs](https://www.youtube.com/watch?v=DP454c1K_vQ&t=68s)

@@ -17,20 +17,3 @@
         WHERE 
             adset.status = 'DELIVERING';
      ```
-
-2.**Question:** "What is the total sales amount for all orders placed in 2023?"
-  **Output SQL Query:**
-     ```sql
-     SELECT SUM(total_amount) 
-     FROM orders 
-     WHERE YEAR(order_date) = 2023;
-     ```
-
-3.**Question:** "Which customers placed orders in January 2024?"
-  **Output SQL Query:**
-     ```sql
-     SELECT c.first_name, c.last_name, c.email 
-     FROM customers c
-     JOIN orders o ON c.customer_id = o.customer_id
-     WHERE o.order_date BETWEEN '2024-01-01' AND '2024-01-31';
-     ```
