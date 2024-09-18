@@ -61,5 +61,46 @@
 - Avoid comments, questions, or giving directions.
 - Instead of telling your children they're smart, encourage them to work hard and embrace challenges. It teaches them that effort and perseverance are the keys to growth.
 
+### [LLM Evaluation](https://www.wandb.courses/courses/take/training-fine-tuning-LLMs/lessons/44579578-introduction-to-llm-evaluation)
+Here’s an improved version of your chat for clarity, structure, and better readability:
+
+---
+
+### [LLM Evaluation Overview](https://www.wandb.courses/courses/take/training-fine-tuning-LLMs/lessons/44579578-introduction-to-llm-evaluation)
+
+#### Key Evaluation Techniques:
+1. **HumanEval**:
+   - Uses **unit tests** rather than traditional n-grams for evaluating code generation.
+
+2. **OpenLLM Benchmarks**:
+   - **Arc**: Focuses on multiple-choice questions with reasoning components.
+   - **HellaSwag**: Evaluates the ability to correctly complete sentences.
+   - **MMLU**: is a benchmark designed to evaluate the multitask accuracy of language models across a wide variety of subjects
+   - **TruthfulQA**: Aims to test models on question-answering tasks, ensuring they do not generate false or misleading responses.
+
+3. **Evaluation Tools**:
+   - **Eleuther Eval Harness**: A toolkit for standardized LLM evaluation across different tasks and benchmarks.
+
+4. **HELM**:
+   - focus on English
+   - provides a comprehensive, multidimensional evaluation of LLMs, helping researchers and developers understand not just how good a model is at a specific task, but also how safe, fair, and reliable it is across different use cases
+
+5. **MosaicML**
+   - lower price.
+
+6. **Chatbot Arena**
+   - Elo ratings
+   - MT-Bench and LLM-as-a-judge
+   - Model bias
+
+7. **Specific Use Cases**
+   - These benchmarks are designed by domain experts and are focused on specific niche domains. For example LegalBench, which evaluates models on different legal reasoning tasks. 
+
+8. [**LLM Apps**](https://www.wandb.courses/courses/building-llm-powered-apps)
+   - Vibes check: curated, Human
+   - Model-based Eval: curated, & generated, LLM
+   - Unit testing: curated, & generated, LLM
+   - A/B testing: production, User
+
 ## TODO
 ### [Neural and Non-Neural AI, Reasoning, Transformers, and LSTMs](https://www.youtube.com/watch?v=DP454c1K_vQ&t=68s)
