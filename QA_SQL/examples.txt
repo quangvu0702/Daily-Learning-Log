@@ -1,7 +1,12 @@
 **Example Questions and Queries (`examples.txt`):**
 
+Note: 
+1. If you need to retrieve all running brands/campaign/company/..., make sure to extract the status from the adset table.
+2. country and venture id are store in catalog_id and venture_id fields. Here are the list of (catalog_id, country_code, country): (1, SG, Singapore), (2, MY, Malaysia), (3, HK, Hongkong), (4, TW, Taiwan), (5, ID, Indonesia), (6, PH, Philippines)
+**Examples:**
+
 1.**Question:** "get all running campaigns"
-  **Output SQL Query:**
+    **Output SQL Query:**
      ```SELECT 
         campaign.id AS campaign_id, 
         campaign.name AS campaign_name, 
@@ -17,3 +22,121 @@
         WHERE 
             adset.status = 'DELIVERING';
      ```
+2. **Question:** "get catalog id or country code of campaign 28352"
+    **Output SQL Query:**
+    ```
+    SELECT 
+        targeting.catalog_id 
+    FROM 
+        sponsor_targeting AS targeting 
+    WHERE 
+        targeting.campaign_id = 28352;
+    ```
+
+3. **Question:**:""get country and running status of campaign 28350"
+    **Output SQL Query:**
+    ```
+    SELECT 
+    targeting.catalog_id,  -- Get the catalog ID
+    adset.status             -- Get the running status of the ad set
+    FROM 
+        sponsor_targeting AS targeting 
+    INNER JOIN 
+        sponsor_adset AS adset ON targeting.campaign_id = adset.campaign_id
+    WHERE 
+        targeting.campaign_id = 28350;  -- Filter by specific campaign ID
+    ```
+4. **Question:**:""get catalog_id, campaign_id all running campaign"
+    **Output SQL Query:**
+    ```
+    SELECT 
+    targeting.catalog_id,         -- Catalog ID associated with the campaign
+    campaign.id AS campaign_id    -- Campaign ID 
+    FROM 
+        sponsor_adset AS adset        -- Table containing adset information
+    INNER JOIN 
+        sponsor_campaign AS campaign   -- Table containing campaign information
+    ON 
+        adset.campaign_id = campaign.id -- Join on campaign ID
+    INNER JOIN 
+        sponsor_targeting AS targeting  -- Table containing targeting information
+    ON 
+        targeting.campaign_id = campaign.id -- Join on campaign ID for targeting
+    WHERE 
+        adset.status = 'DELIVERING';   -- Filter for running campaigns
+    ```
+
+5. **Question:**:""get catalog_id, campaign_id all running campaign in SG"
+    **Output SQL Query:**
+    ```
+    SELECT 
+    targeting.catalog_id,         -- Catalog ID associated with the campaign
+    campaign.id AS campaign_id    -- Campaign ID 
+    FROM 
+        sponsor_adset AS adset        -- Table containing adset information
+    INNER JOIN 
+        sponsor_campaign AS campaign   -- Table containing campaign information
+    ON 
+        adset.campaign_id = campaign.id -- Join on campaign ID
+    INNER JOIN 
+        sponsor_targeting AS targeting  -- Table containing targeting information
+    ON 
+        targeting.campaign_id = campaign.id -- Join on campaign ID for targeting
+    WHERE 
+        adset.status = 'DELIVERING';   -- Filter for running campaigns
+        AND targeting.catalog_id = 1;  -- Filter for SG (Singapore)
+    ```
+
+6. **Question:**:"count number of impression of campaign 28350 in 2024"
+    **Output SQL Query:**
+    ```
+    SELECT 
+    COUNT('value') AS total_impressions  -- Count the total number of impressions
+    FROM 
+        report_impression                          -- Data source: report_impression table
+    WHERE 
+        campaign_id = 28350                       -- Filter for the specific campaign ID
+        AND YEAR(`event_time`) = 2024;                    -- Filter for the year 2024
+    ```
+7. **Question:**:"count number of click of campaign 28353 in 2024"
+    **Output SQL Query:**
+    ```
+    SELECT 
+        COUNT(`value`) AS total_clicks  -- Count the total number of clicks
+    FROM 
+        report_click                          -- Data source: report_click table
+    WHERE 
+        campaign_id = 28353                  -- Filter for the specific campaign ID
+        AND YEAR(`event_time`) = 2024;       -- Filter for the year 2024
+    ```
+
+8. **Question:**:"count number of sale of campaign 28353 in 2024"
+    **Output SQL Query:**
+    ```
+    SELECT 
+        COUNT(*) AS total_sales  -- Count the total number of sales
+    FROM 
+        report_sale                          -- Data source: report_sale table
+    WHERE 
+        campaign_id = 28353                -- Filter for the specific campaign ID
+        AND YEAR(`event_time`) = 2024     -- Filter for the year 2024
+        AND is_valid = 1
+    ```
+
+9. **Question:**:"count number of impression, click, sale item of campaign 28353 in 2024"
+    **Output SQL Query:**
+    ```
+    SELECT 
+        COUNT(DISTINCT imp.value) AS total_impressions,  -- Count the total number of distinct impressions
+        COUNT(DISTINCT cli.value) AS total_clicks,       -- Count the total number of distinct clicks
+        COUNT(DISTINCT sale.value) AS total_sales         -- Count the total number of distinct sales
+    FROM 
+        report_impression AS imp                           -- Data source for impressions
+    LEFT JOIN 
+        report_click AS cli ON imp.campaign_id = cli.campaign_id   -- Join to get click data for the same campaign
+    LEFT JOIN 
+        report_sale AS sale ON imp.campaign_id = sale.campaign_id      -- Join to get sales data for the same campaign
+    WHERE 
+        imp.campaign_id = 28353                       -- Filter for the specific campaign ID
+        AND YEAR(imp.event_time) = 2024;              -- Filter for the year 2024
+    ```

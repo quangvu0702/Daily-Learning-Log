@@ -86,3 +86,5 @@ This development cycle ensures a systematic approach to building and improving t
 Because the number of topics are finite, we can cover 99% of topics by add more examples.
 
 
+https://js.langchain.com/v0.1/docs/use_cases/sql/ 
+https://python.langchain.com/v0.2/docs/tutorials/sql_qa/

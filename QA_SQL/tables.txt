@@ -380,116 +380,215 @@
 110. report_click
     Structure based on init_dafiti_2020_12_08.sql:
         CREATE TABLE `report_click` (
-          `id` int(11) NOT NULL AUTO_INCREMENT,
-          `date_created` datetime(6) NOT NULL,
-          `date_updated` datetime(6) NOT NULL,
-          `date` date NOT NULL,
-          `campaign_id` int(11) DEFAULT NULL,
-          `placement_id` int(11) DEFAULT NULL,
-          `brand_id` char(32) DEFAULT NULL,
-          `venture_id` int(11) DEFAULT NULL,
-          `clicks` int(11) NOT NULL,
-          PRIMARY KEY (`id`),
-          KEY `report_click_campaign_id_e4b89f3f_fk_campaign_campaign_id` (`campaign_id`),
-          KEY `report_click_placement_id_b2e1c8c4_fk_campaign_placement_id` (`placement_id`),
-          KEY `report_click_brand_id_5c1c81d1_fk_users_brand_id` (`brand_id`),
-          KEY `report_click_venture_id_1c9c5f74_fk_campaign_venture_id` (`venture_id`),
-          CONSTRAINT `report_click_brand_id_5c1c81d1_fk_users_brand_id` FOREIGN KEY (`brand_id`) REFERENCES `users_brand` (`id`),
-          CONSTRAINT `report_click_campaign_id_e4b89f3f_fk_campaign_campaign_id` FOREIGN KEY (`campaign_id`) REFERENCES `campaign_campaign` (`id`),
-          CONSTRAINT `report_click_placement_id_b2e1c8c4_fk_campaign_placement_id` FOREIGN KEY (`placement_id`) REFERENCES `campaign_placement` (`id`),
-          CONSTRAINT `report_click_venture_id_1c9c5f74_fk_campaign_venture_id` FOREIGN KEY (`venture_id`) REFERENCES `campaign_venture` (`id`)
+          `id` INTEGER NOT NULL AUTO_INCREMENT,
+          `date_created` DATETIME NOT NULL,
+          `date_updated` DATETIME NOT NULL,
+          `campaign_id` VARCHAR DEFAULT NULL,
+          `campaign_name` VARCHAR DEFAULT NULL,
+          `package_id` VARCHAR DEFAULT NULL,
+          `package_name` VARCHAR DEFAULT NULL,
+          `placement_id` VARCHAR DEFAULT NULL,
+          `placement_name` VARCHAR DEFAULT NULL,
+          `supplier_id` CHAR DEFAULT NULL,
+          `supplier_name` VARCHAR DEFAULT NULL,
+          `venture_id` VARCHAR DEFAULT NULL,
+          `venture_name` VARCHAR DEFAULT NULL,
+          `device_category` VARCHAR DEFAULT NULL,
+          `event_time` DATETIME NOT NULL,
+          `source` LONGTEXT COLLATE utf8mb4_general_ci DEFAULT NULL,
+          `value` INTEGER UNSIGNED DEFAULT NULL,
+          `ad_id` VARCHAR DEFAULT NULL,
+          `ad_set_id` VARCHAR DEFAULT NULL,
+          `campaign_type` VARCHAR DEFAULT NULL,
+          `brand_id` CHAR DEFAULT NULL,
+          `displayed_ad_id` VARCHAR DEFAULT NULL,
+          `ad_type` VARCHAR DEFAULT NULL,
+          `sku` VARCHAR DEFAULT NULL,
+          `user_id` VARCHAR DEFAULT NULL,
+          `brand_name` VARCHAR DEFAULT NULL,
+          `page_type` VARCHAR DEFAULT NULL,
+          `event_time_tz` DATETIME DEFAULT NULL,
+          `bulk_id` VARCHAR DEFAULT NULL,
+          PRIMARY KEY (`id`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8
     - Fields explanation:
-        - id: Unique identifier for each click record (int(11), auto-increment)
-        - date_created: Timestamp of when the record was created (datetime(6))
-        - date_updated: Timestamp of when the record was last updated (datetime(6))
-        - date: Date of the click data (date)
-        - campaign_id: Foreign key to campaign_campaign table (int(11))
-        - placement_id: Foreign key to campaign_placement table (int(11))
-        - brand_id: Foreign key to users_brand table (char(32))
-        - venture_id: Foreign key to campaign_venture table (int(11))
-        - clicks: Number of clicks recorded (int(11))
-    - Has relationships to campaign_campaign, campaign_placement, users_brand, and campaign_venture tables
+        - id: Unique identifier for each click record (INTEGER, auto-increment)
+        - date_created: Timestamp of when the record was created (DATETIME)
+        - date_updated: Timestamp of when the record was last updated (DATETIME)
+        - campaign_id: Identifier for the campaign (VARCHAR)
+        - campaign_name: Name of the campaign (VARCHAR)
+        - package_id: Identifier for the package (VARCHAR)
+        - package_name: Name of the package (VARCHAR)
+        - placement_id: Identifier for the placement (VARCHAR)
+        - placement_name: Name of the placement (VARCHAR)
+        - supplier_id: Identifier for the supplier (CHAR)
+        - supplier_name: Name of the supplier (VARCHAR)
+        - venture_id: Identifier for the venture (VARCHAR)
+        - venture_name: Name of the venture (VARCHAR)
+        - device_category: Category of the device (VARCHAR)
+        - event_time: Timestamp of the event (DATETIME)
+        - source: Source of the click event (LONGTEXT COLLATE utf8mb4_general_ci)
+        - value: Value associated with the click event (INTEGER UNSIGNED)
+        - ad_id: Identifier for the ad (VARCHAR)
+        - ad_set_id: Identifier for the ad set (VARCHAR)
+        - campaign_type: Type of the campaign (VARCHAR)
+        - brand_id: Identifier for the brand (CHAR)
+        - displayed_ad_id: Identifier for the displayed ad (VARCHAR)
+        - ad_type: Type of the ad (VARCHAR)
+        - sku: Stock Keeping Unit (VARCHAR)
+        - user_id: Identifier for the user (VARCHAR)
+        - brand_name: Name of the brand (VARCHAR)
+        - page_type: Type of the page (VARCHAR)
+        - event_time_tz: Timestamp of the event with timezone (DATETIME)
+        - bulk_id: Identifier for the bulk operation (VARCHAR)
     - Uses InnoDB storage engine and UTF-8 character set
-    - Stores click data for campaigns, including the number of clicks per campaign, placement, brand, and venture on a specific date
- 
+    - Stores detailed click data for campaigns, including campaign, package, placement, supplier, venture, device, ad, brand, and user information, as well as event timestamps and values
 111. report_cost
     Structure based on init_dafiti_2020_12_08.sql:
         CREATE TABLE `report_cost` (
-          `id` int(11) NOT NULL AUTO_INCREMENT,
-          `date_created` datetime(6) NOT NULL,
-          `date_updated` datetime(6) NOT NULL,
-          `date` date NOT NULL,
-          `campaign_id` int(11) DEFAULT NULL,
-          `placement_id` int(11) DEFAULT NULL,
-          `brand_id` char(32) DEFAULT NULL,
-          `venture_id` int(11) DEFAULT NULL,
-          `cost` decimal(20,2) NOT NULL,
-          `currency` varchar(3) NOT NULL,
-          PRIMARY KEY (`id`),
-          KEY `report_cost_campaign_id_e7e7a1d9_fk_campaign_campaign_id` (`campaign_id`),
-          KEY `report_cost_placement_id_a8c4f6e4_fk_campaign_placement_id` (`placement_id`),
-          KEY `report_cost_brand_id_d6a0d7a1_fk_users_brand_id` (`brand_id`),
-          KEY `report_cost_venture_id_1c9c5f74_fk_campaign_venture_id` (`venture_id`),
-          CONSTRAINT `report_cost_brand_id_d6a0d7a1_fk_users_brand_id` FOREIGN KEY (`brand_id`) REFERENCES `users_brand` (`id`),
-          CONSTRAINT `report_cost_campaign_id_e7e7a1d9_fk_campaign_campaign_id` FOREIGN KEY (`campaign_id`) REFERENCES `campaign_campaign` (`id`),
-          CONSTRAINT `report_cost_placement_id_a8c4f6e4_fk_campaign_placement_id` FOREIGN KEY (`placement_id`) REFERENCES `campaign_placement` (`id`),
-          CONSTRAINT `report_cost_venture_id_1c9c5f74_fk_campaign_venture_id` FOREIGN KEY (`venture_id`) REFERENCES `campaign_venture` (`id`)
+          `id` INTEGER NOT NULL AUTO_INCREMENT,
+          `date_created` DATETIME NOT NULL,
+          `date_updated` DATETIME NOT NULL,
+          `value` DECIMAL NOT NULL,
+          `venture_id` VARCHAR DEFAULT NULL,
+          `venture_name` VARCHAR DEFAULT NULL,
+          `supplier_id` CHAR DEFAULT NULL,
+          `supplier_name` VARCHAR DEFAULT NULL,
+          `package_id` VARCHAR DEFAULT NULL,
+          `package_name` VARCHAR DEFAULT NULL,
+          `purchase_order` VARCHAR DEFAULT NULL,
+          `purchase_name` VARCHAR DEFAULT NULL,
+          `campaign_id` VARCHAR DEFAULT NULL,
+          `campaign_name` VARCHAR DEFAULT NULL,
+          `placement_id` VARCHAR DEFAULT NULL,
+          `placement_name` VARCHAR DEFAULT NULL,
+          `event_time` DATETIME DEFAULT NULL,
+          `device_category` VARCHAR DEFAULT NULL,
+          `source` LONGTEXT COLLATE utf8mb4_general_ci DEFAULT NULL,
+          `campaign_type` VARCHAR DEFAULT NULL,
+          `ad_id` VARCHAR DEFAULT NULL,
+          `ad_set_id` VARCHAR DEFAULT NULL,
+          `brand_id` CHAR DEFAULT NULL,
+          `displayed_ad_id` VARCHAR DEFAULT NULL,
+          `ad_type` VARCHAR DEFAULT NULL,
+          `cost_type` VARCHAR DEFAULT NULL,
+          `sku` VARCHAR DEFAULT NULL,
+          `user_id` VARCHAR DEFAULT NULL,
+          `brand_name` VARCHAR DEFAULT NULL,
+          `page_type` VARCHAR DEFAULT NULL,
+          `event_time_tz` DATETIME DEFAULT NULL,
+          `bulk_id` CHAR DEFAULT NULL,
+          `value_local_currency` DECIMAL DEFAULT NULL,
+          `venture_currency_rate` DECIMAL DEFAULT NULL,
+          PRIMARY KEY (`id`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8
     - Fields explanation:
-        - id: Unique identifier for each cost record (int(11), auto-increment)
-        - date_created: Timestamp of when the record was created (datetime(6))
-        - date_updated: Timestamp of when the record was last updated (datetime(6))
-        - date: Date of the cost data (date)
-        - campaign_id: Foreign key to campaign_campaign table (int(11))
-        - placement_id: Foreign key to campaign_placement table (int(11))
-        - brand_id: Foreign key to users_brand table (char(32))
-        - venture_id: Foreign key to campaign_venture table (int(11))
-        - cost: Amount spent (decimal(20,2))
-        - currency: Three-letter currency code (varchar(3))
-    - Has relationships to campaign_campaign, campaign_placement, users_brand, and campaign_venture tables
+        - id: Unique identifier for each cost record (INTEGER, auto-increment)
+        - date_created: Timestamp of when the record was created (DATETIME)
+        - date_updated: Timestamp of when the record was last updated (DATETIME)
+        - value: Value associated with the cost event (DECIMAL)
+        - venture_id: Identifier for the venture (VARCHAR)
+        - venture_name: Name of the venture (VARCHAR)
+        - supplier_id: Identifier for the supplier (CHAR)
+        - supplier_name: Name of the supplier (VARCHAR)
+        - package_id: Identifier for the package (VARCHAR)
+        - package_name: Name of the package (VARCHAR)
+        - purchase_order: Identifier for the purchase order (VARCHAR)
+        - purchase_name: Name of the purchase (VARCHAR)
+        - campaign_id: Identifier for the campaign (VARCHAR)
+        - campaign_name: Name of the campaign (VARCHAR)
+        - placement_id: Identifier for the placement (VARCHAR)
+        - placement_name: Name of the placement (VARCHAR)
+        - event_time: Timestamp of the event (DATETIME)
+        - device_category: Category of the device (VARCHAR)
+        - source: Source of the cost event (LONGTEXT COLLATE utf8mb4_general_ci)
+        - campaign_type: Type of the campaign (VARCHAR)
+        - ad_id: Identifier for the ad (VARCHAR)
+        - ad_set_id: Identifier for the ad set (VARCHAR)
+        - brand_id: Identifier for the brand (CHAR)
+        - displayed_ad_id: Identifier for the displayed ad (VARCHAR)
+        - ad_type: Type of the ad (VARCHAR)
+        - cost_type: Type of the cost (VARCHAR)
+        - sku: Stock Keeping Unit (VARCHAR)
+        - user_id: Identifier for the user (VARCHAR)
+        - brand_name: Name of the brand (VARCHAR)
+        - page_type: Type of the page (VARCHAR)
+        - event_time_tz: Timestamp of the event with timezone (DATETIME)
+        - bulk_id: Identifier for the bulk operation (CHAR)
+        - value_local_currency: Value in local currency (DECIMAL)
+        - venture_currency_rate: Currency rate for the venture (DECIMAL)
     - Uses InnoDB storage engine and UTF-8 character set
-    - Stores cost data for campaigns, including the amount spent and currency for each campaign, placement, brand, and venture combination on a specific date
+    - Stores detailed cost data for campaigns, including campaign, package, placement, supplier, venture, device, ad, brand, and user information, as well as event timestamps and values
 112. report_googlebigquerycredential
 113. report_googlebigquerypromotionname
 114. report_historicalskuprice
 115. report_impression
-    Structure:
-    - `id`: int(11), Primary Key, Auto Increment
-    - `date_created`: datetime(6), Not Null
-    - `date_updated`: datetime(6), Not Null
-    - `date`: date, Not Null
-    - `campaign_id`: int(11), Foreign Key to campaign_campaign(id)
-    - `placement_id`: int(11), Foreign Key to campaign_placement(id)
-    - `brand_id`: char(32), Foreign Key to users_brand(id)
-    - `venture_id`: int(11), Foreign Key to campaign_venture(id)
-    - `impressions`: int(11), Not Null
+    Structure based on init_dafiti_2020_12_08.sql:
+        CREATE TABLE `report_impression` (
+          `id` INTEGER NOT NULL AUTO_INCREMENT,
+          `date_created` DATETIME NOT NULL,
+          `date_updated` DATETIME NOT NULL,
+          `campaign_id` VARCHAR DEFAULT NULL,
+          `campaign_name` VARCHAR DEFAULT NULL,
+          `package_id` VARCHAR DEFAULT NULL,
+          `package_name` VARCHAR DEFAULT NULL,
+          `placement_id` VARCHAR DEFAULT NULL,
+          `placement_name` VARCHAR DEFAULT NULL,
+          `supplier_id` CHAR DEFAULT NULL,
+          `supplier_name` VARCHAR DEFAULT NULL,
+          `venture_id` VARCHAR DEFAULT NULL,
+          `venture_name` VARCHAR DEFAULT NULL,
+          `device_category` VARCHAR DEFAULT NULL,
+          `event_time` DATETIME DEFAULT NULL,
+          `source` LONGTEXT COLLATE utf8mb4_general_ci DEFAULT NULL,
+          `value` INTEGER UNSIGNED NOT NULL,
+          `ad_id` VARCHAR DEFAULT NULL,
+          `ad_set_id` VARCHAR DEFAULT NULL,
+          `campaign_type` VARCHAR DEFAULT NULL,
+          `brand_id` CHAR DEFAULT NULL,
+          `displayed_ad_id` VARCHAR DEFAULT NULL,
+          `ad_type` VARCHAR DEFAULT NULL,
+          `sku` VARCHAR DEFAULT NULL,
+          `user_id` VARCHAR DEFAULT NULL,
+          `brand_name` VARCHAR DEFAULT NULL,
+          `page_type` VARCHAR DEFAULT NULL,
+          `event_time_tz` DATETIME DEFAULT NULL,
+          `bulk_id` VARCHAR DEFAULT NULL,
+          PRIMARY KEY (`id`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+    - Fields explanation:
+        - id: Unique identifier for each impression record (INTEGER, auto-increment)
+        - date_created: Timestamp of when the record was created (DATETIME)
+        - date_updated: Timestamp of when the record was last updated (DATETIME)
+        - campaign_id: Identifier for the campaign (VARCHAR)
+        - campaign_name: Name of the campaign (VARCHAR)
+        - package_id: Identifier for the package (VARCHAR)
+        - package_name: Name of the package (VARCHAR)
+        - placement_id: Identifier for the placement (VARCHAR)
+        - placement_name: Name of the placement (VARCHAR)
+        - supplier_id: Identifier for the supplier (CHAR)
+        - supplier_name: Name of the supplier (VARCHAR)
+        - venture_id: Identifier for the venture (VARCHAR)
+        - venture_name: Name of the venture (VARCHAR)
+        - device_category: Category of the device (VARCHAR)
+        - event_time: Timestamp of the event (DATETIME)
+        - source: Source of the data (LONGTEXT COLLATE utf8mb4_general_ci)
+        - value: Number of impressions recorded (INTEGER UNSIGNED)
+        - ad_id: Identifier for the ad (VARCHAR)
+        - ad_set_id: Identifier for the ad set (VARCHAR)
+        - campaign_type: Type of the campaign (VARCHAR)
+        - brand_id: Identifier for the brand (CHAR)
+        - displayed_ad_id: Identifier for the displayed ad (VARCHAR)
+        - ad_type: Type of the ad (VARCHAR)
+        - sku: Stock Keeping Unit (VARCHAR)
+        - user_id: Identifier for the user (VARCHAR)
+        - brand_name: Name of the brand (VARCHAR)
+        - page_type: Type of the page (VARCHAR)
+        - event_time_tz: Timestamp of the event with timezone (DATETIME)
+        - bulk_id: Identifier for the bulk operation (VARCHAR)
+    - Uses InnoDB storage engine and UTF-8 character set
+    - Stores impression data for campaigns, including detailed information about the campaign, placement, supplier, venture, device, ad, and user on a specific date
 
-    This table stores impression data for campaigns. It records the number of times campaign content was displayed to users for each campaign, placement, brand, and venture combination on a specific date. The `impressions` field represents the count of these displays. The `date_created` and `date_updated` fields track when the record was created and last updated, respectively. This data is crucial for measuring the visibility and reach of advertising campaigns.
-
-    Table schema based on init_dafiti_2020_12_08.sql:
-    ```sql
-    CREATE TABLE `report_impression` (
-      `id` int(11) NOT NULL AUTO_INCREMENT,
-      `date_created` datetime(6) NOT NULL,
-      `date_updated` datetime(6) NOT NULL,
-      `date` date NOT NULL,
-      `campaign_id` int(11) DEFAULT NULL,
-      `placement_id` int(11) DEFAULT NULL,
-      `brand_id` char(32) DEFAULT NULL,
-      `venture_id` int(11) DEFAULT NULL,
-      `impressions` int(11) NOT NULL,
-      PRIMARY KEY (`id`),
-      KEY `report_impression_campaign_id_e7e7a1d9_fk_campaign_campaign_id` (`campaign_id`),
-      KEY `report_impression_placement_id_a8c4f6e4_fk_campaign_placement_id` (`placement_id`),
-      KEY `report_impression_brand_id_d6a0d7a1_fk_users_brand_id` (`brand_id`),
-      KEY `report_impression_venture_id_1c9c5f74_fk_campaign_venture_id` (`venture_id`),
-      CONSTRAINT `report_impression_brand_id_d6a0d7a1_fk_users_brand_id` FOREIGN KEY (`brand_id`) REFERENCES `users_brand` (`id`),
-      CONSTRAINT `report_impression_campaign_id_e7e7a1d9_fk_campaign_campaign_id` FOREIGN KEY (`campaign_id`) REFERENCES `campaign_campaign` (`id`),
-      CONSTRAINT `report_impression_placement_id_a8c4f6e4_fk_campaign_placement_id` FOREIGN KEY (`placement_id`) REFERENCES `campaign_placement` (`id`),
-      CONSTRAINT `report_impression_venture_id_1c9c5f74_fk_campaign_venture_id` FOREIGN KEY (`venture_id`) REFERENCES `campaign_venture` (`id`)
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8
-    ```
 
 116. report_invalidsale
 117. report_placement
@@ -499,14 +598,31 @@
     - `id`: int(11), Primary Key, Auto Increment
     - `date_created`: datetime(6), Not Null
     - `date_updated`: datetime(6), Not Null
-    - `date`: date, Not Null
-    - `campaign_id`: int(11), Foreign Key to campaign_campaign(id)
-    - `placement_id`: int(11), Foreign Key to campaign_placement(id)
-    - `brand_id`: char(32), Foreign Key to users_brand(id)
-    - `venture_id`: int(11), Foreign Key to campaign_venture(id)
-    - `reach`: int(11), Not Null
+    - `campaign_id`: varchar(255), Not Null
+    - `campaign_name`: varchar(255), Not Null
+    - `package_id`: varchar(255), Not Null
+    - `package_name`: varchar(255), Not Null
+    - `placement_id`: varchar(255), Not Null
+    - `placement_name`: varchar(255), Not Null
+    - `supplier_id`: char(32), Not Null
+    - `supplier_name`: varchar(255), Not Null
+    - `venture_id`: varchar(255), Not Null
+    - `venture_name`: varchar(255), Not Null
+    - `device_category`: varchar(255), Not Null
+    - `event_time`: datetime(6), Not Null
+    - `source`: longtext COLLATE utf8mb4_general_ci, Not Null
+    - `value`: int(11) UNSIGNED, Not Null
+    - `ad_id`: varchar(255), Not Null
+    - `ad_set_id`: varchar(255), Not Null
+    - `campaign_type`: varchar(255), Not Null
+    - `brand_id`: char(32), Not Null
+    - `displayed_ad_id`: varchar(255), Not Null
+    - `user_id`: varchar(255), Not Null
+    - `brand_name`: varchar(255), Not Null
+    - `event_time_tz`: datetime(6), Not Null
+    - `bulk_id`: varchar(255), Not Null
 
-    This table stores reach data for campaigns. It records the number of unique users reached by each campaign, placement, brand, and venture combination on a specific date. The `reach` field represents the count of unique users who were exposed to the campaign. The `date_created` and `date_updated` fields track when the record was created and last updated, respectively. This data is crucial for measuring the extent of a campaign's audience and its overall reach in advertising efforts.
+    This table stores reach data for campaigns. It records the number of unique users reached by each campaign, placement, brand, and venture combination on a specific date. The `value` field represents the count of unique users who were exposed to the campaign. The `date_created` and `date_updated` fields track when the record was created and last updated, respectively. This data is crucial for measuring the extent of a campaign's audience and its overall reach in advertising efforts.
 
     Table schema based on init_dafiti_2020_12_08.sql:
     ```sql
@@ -514,80 +630,188 @@
       `id` int(11) NOT NULL AUTO_INCREMENT,
       `date_created` datetime(6) NOT NULL,
       `date_updated` datetime(6) NOT NULL,
-      `date` date NOT NULL,
-      `campaign_id` int(11) DEFAULT NULL,
-      `placement_id` int(11) DEFAULT NULL,
-      `brand_id` char(32) DEFAULT NULL,
-      `venture_id` int(11) DEFAULT NULL,
-      `reach` int(11) NOT NULL,
-      PRIMARY KEY (`id`),
-      KEY `report_reach_campaign_id_e7e7a1d9_fk_campaign_campaign_id` (`campaign_id`),
-      KEY `report_reach_placement_id_a8c4f6e4_fk_campaign_placement_id` (`placement_id`),
-      KEY `report_reach_brand_id_d6a0d7a1_fk_users_brand_id` (`brand_id`),
-      KEY `report_reach_venture_id_1c9c5f74_fk_campaign_venture_id` (`venture_id`),
-      CONSTRAINT `report_reach_brand_id_d6a0d7a1_fk_users_brand_id` FOREIGN KEY (`brand_id`) REFERENCES `users_brand` (`id`),
-      CONSTRAINT `report_reach_campaign_id_e7e7a1d9_fk_campaign_campaign_id` FOREIGN KEY (`campaign_id`) REFERENCES `campaign_campaign` (`id`),
-      CONSTRAINT `report_reach_placement_id_a8c4f6e4_fk_campaign_placement_id` FOREIGN KEY (`placement_id`) REFERENCES `campaign_placement` (`id`),
-      CONSTRAINT `report_reach_venture_id_1c9c5f74_fk_campaign_venture_id` FOREIGN KEY (`venture_id`) REFERENCES `campaign_venture` (`id`)
+      `campaign_id` varchar(255) NOT NULL,
+      `campaign_name` varchar(255) NOT NULL,
+      `package_id` varchar(255) NOT NULL,
+      `package_name` varchar(255) NOT NULL,
+      `placement_id` varchar(255) NOT NULL,
+      `placement_name` varchar(255) NOT NULL,
+      `supplier_id` char(32) NOT NULL,
+      `supplier_name` varchar(255) NOT NULL,
+      `venture_id` varchar(255) NOT NULL,
+      `venture_name` varchar(255) NOT NULL,
+      `device_category` varchar(255) NOT NULL,
+      `event_time` datetime(6) NOT NULL,
+      `source` longtext COLLATE utf8mb4_general_ci NOT NULL,
+      `value` int(11) UNSIGNED NOT NULL,
+      `ad_id` varchar(255) NOT NULL,
+      `ad_set_id` varchar(255) NOT NULL,
+      `campaign_type` varchar(255) NOT NULL,
+      `brand_id` char(32) NOT NULL,
+      `displayed_ad_id` varchar(255) NOT NULL,
+      `user_id` varchar(255) NOT NULL,
+      `brand_name` varchar(255) NOT NULL,
+      `event_time_tz` datetime(6) NOT NULL,
+      `bulk_id` varchar(255) NOT NULL,
+      PRIMARY KEY (`id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8
     ```
 
-
-    This table stores reach data for campaigns. It records the number of unique users reached by each campaign, placement, brand, and venture combination on a specific date. The `reach` field represents the count of unique users who were exposed to the campaign. The `date_created` and `date_updated` fields track when the record was created and last updated, respectively. This data is crucial for measuring the extent of a campaign's audience and its overall reach in advertising efforts.
+    This table stores reach data for campaigns. It records the number of unique users reached by each campaign, placement, brand, and venture combination on a specific date. The `value` field represents the count of unique users who were exposed to the campaign. The `date_created` and `date_updated` fields track when the record was created and last updated, respectively. This data is crucial for measuring the extent of a campaign's audience and its overall reach in advertising efforts.
 120. report_sale
     Structure:
-    - `id`: int(11), Primary Key, Auto Increment
-    - `date_created`: datetime(6), Not Null
-    - `date_updated`: datetime(6), Not Null
-    - `date`: date, Not Null
-    - `campaign_id`: int(11), Foreign Key to campaign_campaign(id)
-    - `placement_id`: int(11), Foreign Key to campaign_placement(id)
-    - `brand_id`: char(32), Foreign Key to users_brand(id)
-    - `venture_id`: int(11), Foreign Key to campaign_venture(id)
-    - `sku`: varchar(100), Not Null
-    - `quantity`: int(11), Not Null
-    - `revenue`: decimal(20,2), Not Null
-    - `currency`: varchar(3), Not Null
-    - `order_id`: varchar(100), Not Null
-    - `customer_id`: varchar(100), Not Null
-    - `is_new_customer`: tinyint(1), Not Null
-    - `is_valid`: tinyint(1), Not Null
+    - `id`: INTEGER, Primary Key, Auto Increment
+    - `date_created`: DATETIME, Not Null
+    - `date_updated`: DATETIME, Not Null
+    - `value`: DECIMAL, Not Null
+    - `venture_id`: VARCHAR, Not Null
+    - `venture_name`: VARCHAR, Not Null
+    - `supplier_id`: CHAR, Not Null
+    - `supplier_name`: VARCHAR, Not Null
+    - `package_id`: VARCHAR, Not Null
+    - `package_name`: VARCHAR, Not Null
+    - `campaign_id`: VARCHAR, Not Null
+    - `campaign_name`: VARCHAR, Not Null
+    - `placement_id`: VARCHAR, Not Null
+    - `placement_name`: VARCHAR, Not Null
+    - `purchase_name`: VARCHAR, Not Null
+    - `purchase_order`: VARCHAR, Not Null
+    - `device_category`: VARCHAR, Not Null
+    - `event_time`: DATETIME, Not Null
+    - `source`: LONGTEXT COLLATE utf8mb4_general_ci, Not Null
+    - `ad_id`: VARCHAR, Not Null
+    - `ad_set_id`: VARCHAR, Not Null
+    - `campaign_type`: VARCHAR, Not Null
+    - `brand_id`: CHAR, Not Null
+    - `displayed_ad_id`: VARCHAR, Not Null
+    - `sku`: VARCHAR, Not Null
+    - `quantity`: INTEGER UNSIGNED, Not Null
+    - `user_id`: VARCHAR, Not Null
+    - `brand_name`: VARCHAR, Not Null
+    - `cart_rule_discount`: DECIMAL, Not Null
+    - `cart_rule_display_names`: VARCHAR, Not Null
+    - `coupon_money_value`: DECIMAL, Not Null
+    - `gender`: VARCHAR, Not Null
+    - `original_unit_price`: DECIMAL, Not Null
+    - `platform`: VARCHAR, Not Null
+    - `unit_price`: DECIMAL, Not Null
+    - `venture_currency_code`: VARCHAR, Not Null
+    - `venture_currency_rate`: DECIMAL, Not Null
+    - `venture_currency_symbol`: VARCHAR, Not Null
+    - `purchase_order_item`: VARCHAR, Not Null
+    - `attribution_window`: INTEGER UNSIGNED, Not Null
+    - `conversion_type`: VARCHAR, Not Null
+    - `touch_point_type`: VARCHAR, Not Null
+    - `paid_price`: DECIMAL, Not Null
+    - `wallet_credits`: DECIMAL, Not Null
+    - `ad_type`: VARCHAR, Not Null
+    - `page_type`: VARCHAR, Not Null
+    - `is_valid`: TINYINT, Not Null
+    - `fk_supplier`: VARCHAR, Not Null
+    - `note`: LONGTEXT COLLATE utf8mb4_general_ci, Not Null
+    - `is_marketplace`: TINYINT, Not Null
+    - `event_time_tz`: DATETIME, Not Null
+    - `bulk_id`: CHAR, Not Null
+    - `is_cancelled`: TINYINT, Not Null
+    - `is_rejected`: TINYINT, Not Null
+    - `is_returned`: TINYINT, Not Null
+    - `order_date`: VARCHAR, Not Null
+    - `order_id`: VARCHAR, Not Null
+    - `order_product_id`: VARCHAR, Not Null
+    - `banner_type`: VARCHAR, Not Null
+    - `search_term`: VARCHAR, Not Null
+    - `value_main_currency`: DECIMAL, Not Null
+    - `is_invalid`: TINYINT, Not Null
+    - `sale_platform`: VARCHAR, Not Null
+    - `device_id`: LONGTEXT COLLATE utf8mb4_general_ci, Not Null
+    - `is_login`: TINYINT, Not Null
+    - `placement`: VARCHAR, Not Null
+    - `placement_version`: VARCHAR, Not Null
+    - `experiment_id`: VARCHAR, Not Null
+    - `request_id`: VARCHAR, Not Null
+    - `variation_id`: VARCHAR, Not Null
 
-    This table stores sales data for campaigns. It records detailed information about each sale, including the associated campaign, placement, brand, and venture. The `date` field indicates when the sale occurred. The `sku` field stores the product identifier, while `quantity` and `revenue` capture the sale details. The `currency` field stores the three-letter currency code. The `order_id` and `customer_id` fields help in tracking individual orders and customers. The `is_new_customer` flag indicates whether this is a new customer, and `is_valid` determines if the sale is considered valid. The `date_created` and `date_updated` fields track when the record was created and last updated, respectively.
+    This table stores sales data for campaigns. It records detailed information about each sale, including the associated campaign, placement, brand, and venture. The `event_time` field indicates when the sale occurred. The `sku` field stores the product identifier, while `quantity` and `value` capture the sale details. The `currency` fields store the currency information. The `order_id` and `customer_id` fields help in tracking individual orders and customers. The `is_valid` flag determines if the sale is considered valid. The `date_created` and `date_updated` fields track when the record was created and last updated, respectively.
 
     Table schema based on init_dafiti_2020_12_08.sql:
     ```sql
     CREATE TABLE `report_sale` (
-      `id` int(11) NOT NULL AUTO_INCREMENT,
-      `date_created` datetime(6) NOT NULL,
-      `date_updated` datetime(6) NOT NULL,
-      `date` date NOT NULL,
-      `campaign_id` int(11) DEFAULT NULL,
-      `placement_id` int(11) DEFAULT NULL,
-      `brand_id` char(32) DEFAULT NULL,
-      `venture_id` int(11) DEFAULT NULL,
-      `sku` varchar(100) NOT NULL,
-      `quantity` int(11) NOT NULL,
-      `revenue` decimal(20,2) NOT NULL,
-      `currency` varchar(3) NOT NULL,
-      `order_id` varchar(100) NOT NULL,
-      `customer_id` varchar(100) NOT NULL,
-      `is_new_customer` tinyint(1) NOT NULL,
-      `is_valid` tinyint(1) NOT NULL,
-      PRIMARY KEY (`id`),
-      KEY `report_sale_campaign_id_e7e7a1d9_fk_campaign_campaign_id` (`campaign_id`),
-      KEY `report_sale_placement_id_a8c4f6e4_fk_campaign_placement_id` (`placement_id`),
-      KEY `report_sale_brand_id_d6a0d7a1_fk_users_brand_id` (`brand_id`),
-      KEY `report_sale_venture_id_1c9c5f74_fk_campaign_venture_id` (`venture_id`),
-      CONSTRAINT `report_sale_brand_id_d6a0d7a1_fk_users_brand_id` FOREIGN KEY (`brand_id`) REFERENCES `users_brand` (`id`),
-      CONSTRAINT `report_sale_campaign_id_e7e7a1d9_fk_campaign_campaign_id` FOREIGN KEY (`campaign_id`) REFERENCES `campaign_campaign` (`id`),
-      CONSTRAINT `report_sale_placement_id_a8c4f6e4_fk_campaign_placement_id` FOREIGN KEY (`placement_id`) REFERENCES `campaign_placement` (`id`),
-      CONSTRAINT `report_sale_venture_id_1c9c5f74_fk_campaign_venture_id` FOREIGN KEY (`venture_id`) REFERENCES `campaign_venture` (`id`)
+      `id` INTEGER NOT NULL AUTO_INCREMENT,
+      `date_created` DATETIME NOT NULL,
+      `date_updated` DATETIME NOT NULL,
+      `value` DECIMAL NOT NULL,
+      `venture_id` VARCHAR NOT NULL,
+      `venture_name` VARCHAR NOT NULL,
+      `supplier_id` CHAR NOT NULL,
+      `supplier_name` VARCHAR NOT NULL,
+      `package_id` VARCHAR NOT NULL,
+      `package_name` VARCHAR NOT NULL,
+      `campaign_id` VARCHAR NOT NULL,
+      `campaign_name` VARCHAR NOT NULL,
+      `placement_id` VARCHAR NOT NULL,
+      `placement_name` VARCHAR NOT NULL,
+      `purchase_name` VARCHAR NOT NULL,
+      `purchase_order` VARCHAR NOT NULL,
+      `device_category` VARCHAR NOT NULL,
+      `event_time` DATETIME NOT NULL,
+      `source` LONGTEXT COLLATE utf8mb4_general_ci NOT NULL,
+      `ad_id` VARCHAR NOT NULL,
+      `ad_set_id` VARCHAR NOT NULL,
+      `campaign_type` VARCHAR NOT NULL,
+      `brand_id` CHAR NOT NULL,
+      `displayed_ad_id` VARCHAR NOT NULL,
+      `sku` VARCHAR NOT NULL,
+      `quantity` INTEGER UNSIGNED NOT NULL,
+      `user_id` VARCHAR NOT NULL,
+      `brand_name` VARCHAR NOT NULL,
+      `cart_rule_discount` DECIMAL NOT NULL,
+      `cart_rule_display_names` VARCHAR NOT NULL,
+      `coupon_money_value` DECIMAL NOT NULL,
+      `gender` VARCHAR NOT NULL,
+      `original_unit_price` DECIMAL NOT NULL,
+      `platform` VARCHAR NOT NULL,
+      `unit_price` DECIMAL NOT NULL,
+      `venture_currency_code` VARCHAR NOT NULL,
+      `venture_currency_rate` DECIMAL NOT NULL,
+      `venture_currency_symbol` VARCHAR NOT NULL,
+      `purchase_order_item` VARCHAR NOT NULL,
+      `attribution_window` INTEGER UNSIGNED NOT NULL,
+      `conversion_type` VARCHAR NOT NULL,
+      `touch_point_type` VARCHAR NOT NULL,
+      `paid_price` DECIMAL NOT NULL,
+      `wallet_credits` DECIMAL NOT NULL,
+      `ad_type` VARCHAR NOT NULL,
+      `page_type` VARCHAR NOT NULL,
+      `is_valid` TINYINT NOT NULL,
+      `fk_supplier` VARCHAR NOT NULL,
+      `note` LONGTEXT COLLATE utf8mb4_general_ci NOT NULL,
+      `is_marketplace` TINYINT NOT NULL,
+      `event_time_tz` DATETIME NOT NULL,
+      `bulk_id` CHAR NOT NULL,
+      `is_cancelled` TINYINT NOT NULL,
+      `is_rejected` TINYINT NOT NULL,
+      `is_returned` TINYINT NOT NULL,
+      `order_date` VARCHAR NOT NULL,
+      `order_id` VARCHAR NOT NULL,
+      `order_product_id` VARCHAR NOT NULL,
+      `banner_type` VARCHAR NOT NULL,
+      `search_term` VARCHAR NOT NULL,
+      `value_main_currency` DECIMAL NOT NULL,
+      `is_invalid` TINYINT NOT NULL,
+      `sale_platform` VARCHAR NOT NULL,
+      `device_id` LONGTEXT COLLATE utf8mb4_general_ci NOT NULL,
+      `is_login` TINYINT NOT NULL,
+      `placement` VARCHAR NOT NULL,
+      `placement_version` VARCHAR NOT NULL,
+      `experiment_id` VARCHAR NOT NULL,
+      `request_id` VARCHAR NOT NULL,
+      `variation_id` VARCHAR NOT NULL,
+      PRIMARY KEY (`id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8
     ```
 
 
-    This table stores sales data for campaigns. It records detailed information about each sale, including the associated campaign, placement, brand, and venture. The `date` field indicates when the sale occurred. The `sku` field stores the product identifier, while `quantity` and `revenue` capture the sale details. The `currency` field stores the three-letter currency code. The `order_id` and `customer_id` fields help in tracking individual orders and customers. The `is_new_customer` flag indicates whether this is a new customer, and `is_valid` determines if the sale is considered valid. The `date_created` and `date_updated` fields track when the record was created and last updated, respectively.
+    This table stores sales data for campaigns. It records detailed information about each sale, including the associated campaign, placement, brand, and venture. The `event_time` field indicates when the sale occurred. The `sku` field stores the product identifier, while `quantity` and `value` capture the sale details. The `currency` fields store the currency information. The `order_id` and `customer_id` fields help in tracking individual orders and customers. The `is_valid` flag determines if the sale is considered valid. The `date_created` and `date_updated` fields track when the record was created and last updated, respectively.
 121. report_saleordersevent
 122. report_searchterm
 123. report_sku
@@ -879,43 +1103,41 @@
 
 143. sponsor_campaign
     Structure:
-    - `id`: int(11), Primary Key, Auto Increment
-    - `date_created`: datetime(6), Not Null
-    - `date_updated`: datetime(6), Not Null
-    - `name`: varchar(255), Not Null
-    - `status`: varchar(20), Not Null
-    - `start_date`: date, Not Null
-    - `end_date`: date, Not Null
-    - `budget`: decimal(20,2), Not Null
-    - `currency`: varchar(3), Not Null
-    - `brand_id`: char(32), Foreign Key to users_brand(id)
-    - `venture_id`: char(32), Foreign Key to users_venture(id)
+    - `id`: INTEGER, Primary Key, Auto Increment
+    - `date_created`: DATETIME, Not Null
+    - `date_updated`: DATETIME, Not Null
+    - `name`: VARCHAR(255), Not Null
+    - `supplier_id`: CHAR(32), Foreign Key to users_supplier(id)
+    - `brand_id`: CHAR(32), Foreign Key to users_brand(id)
+    - `ad_type`: VARCHAR(50), Not Null
+    - `department_id`: INTEGER, Foreign Key to users_department(id)
+    - `goal`: LONGTEXT COLLATE utf8mb4_general_ci, Not Null
+    - `is_quick_create`: TINYINT(1), Not Null
 
-    This table stores information about sponsored campaigns. The `id` field is the primary key and auto-increments. The `date_created` and `date_updated` fields track when the record was created and last updated, respectively. The `name` field contains the campaign's name (up to 255 characters). The `status` field (up to 20 characters) indicates the campaign's current state (e.g., active, paused, completed). The `start_date` and `end_date` fields define the campaign's duration. The `budget` field stores the total budget allocated for the campaign, and `currency` specifies the three-letter currency code for the budget. The `brand_id` and `venture_id` are foreign keys linking the campaign to specific brands and ventures, respectively.
+    This table stores information about sponsored campaigns. The `id` field is the primary key and auto-increments. The `date_created` and `date_updated` fields track when the record was created and last updated, respectively. The `name` field stores the name of the campaign. The `supplier_id` is a foreign key linking the campaign to a specific supplier in the users_supplier table. The `brand_id` is a foreign key linking the campaign to a specific brand in the users_brand table. The `ad_type` field indicates the type of advertisement (e.g., banner, video). The `department_id` is a foreign key linking the campaign to a specific department in the users_department table. The `goal` field represents the campaign's objectives and is stored as a long text with a specific collation. The `is_quick_create` field is a tiny integer indicating whether the campaign was created quickly.
 
     Table schema based on init_dafiti_2020_12_08.sql:
     ```sql
     CREATE TABLE `sponsor_campaign` (
-      `id` int(11) NOT NULL AUTO_INCREMENT,
-      `date_created` datetime(6) NOT NULL,
-      `date_updated` datetime(6) NOT NULL,
-      `name` varchar(255) NOT NULL,
-      `status` varchar(20) NOT NULL,
-      `start_date` date NOT NULL,
-      `end_date` date NOT NULL,
-      `budget` decimal(20,2) NOT NULL,
-      `currency` varchar(3) NOT NULL,
-      `brand_id` char(32) NOT NULL,
-      `venture_id` char(32) NOT NULL,
+      `id` INTEGER NOT NULL AUTO_INCREMENT,
+      `date_created` DATETIME NOT NULL,
+      `date_updated` DATETIME NOT NULL,
+      `name` VARCHAR(255) NOT NULL,
+      `supplier_id` CHAR(32) NOT NULL,
+      `brand_id` CHAR(32) NOT NULL,
+      `ad_type` VARCHAR(50) NOT NULL,
+      `department_id` INTEGER NOT NULL,
+      `goal` LONGTEXT COLLATE utf8mb4_general_ci NOT NULL,
+      `is_quick_create` TINYINT(1) NOT NULL,
       PRIMARY KEY (`id`),
-      KEY `sponsor_campaign_brand_id_e4b4a0b1_fk_users_brand_id` (`brand_id`),
-      KEY `sponsor_campaign_venture_id_f9c2f6f8_fk_users_venture_id` (`venture_id`),
-      CONSTRAINT `sponsor_campaign_brand_id_e4b4a0b1_fk_users_brand_id` FOREIGN KEY (`brand_id`) REFERENCES `users_brand` (`id`),
-      CONSTRAINT `sponsor_campaign_venture_id_f9c2f6f8_fk_users_venture_id` FOREIGN KEY (`venture_id`) REFERENCES `users_venture` (`id`)
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+      KEY `sponsor_campaign_supplier_id_fk_users_supplier_id` (`supplier_id`),
+      KEY `sponsor_campaign_brand_id_fk_users_brand_id` (`brand_id`),
+      KEY `sponsor_campaign_department_id_fk_users_department_id` (`department_id`),
+      CONSTRAINT `sponsor_campaign_supplier_id_fk_users_supplier_id` FOREIGN KEY (`supplier_id`) REFERENCES `users_supplier` (`id`),
+      CONSTRAINT `sponsor_campaign_brand_id_fk_users_brand_id` FOREIGN KEY (`brand_id`) REFERENCES `users_brand` (`id`),
+      CONSTRAINT `sponsor_campaign_department_id_fk_users_department_id` FOREIGN KEY (`department_id`) REFERENCES `users_department` (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
     ```
-
-    This table is crucial for managing sponsored advertising campaigns. It allows for the organization and tracking of campaign details, including budget allocation, duration, and association with specific brands and ventures. This structure enables efficient campaign management and performance analysis across different brands and ventures within the advertising platform.
 
 144. sponsor_campaigndata
     Structure:
