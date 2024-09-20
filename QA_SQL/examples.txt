@@ -91,7 +91,7 @@ Note:
     **Output SQL Query:**
     ```
     SELECT 
-    COUNT('value') AS total_impressions  -- Count the total number of impressions
+        SUM('value') AS total_impressions  -- Count the total number of impressions
     FROM 
         report_impression                          -- Data source: report_impression table
     WHERE 
@@ -102,7 +102,7 @@ Note:
     **Output SQL Query:**
     ```
     SELECT 
-        COUNT(`value`) AS total_clicks  -- Count the total number of clicks
+        SUM(`value`) AS total_clicks  -- Count the total number of clicks
     FROM 
         report_click                          -- Data source: report_click table
     WHERE 
@@ -114,7 +114,7 @@ Note:
     **Output SQL Query:**
     ```
     SELECT 
-        COUNT(*) AS total_sales  -- Count the total number of sales
+        count(*) AS total_sales  -- Count the total number of sales
     FROM 
         report_sale                          -- Data source: report_sale table
     WHERE 
@@ -127,8 +127,8 @@ Note:
     **Output SQL Query:**
     ```
     SELECT 
-        COUNT(DISTINCT imp.value) AS total_impressions,  -- Count the total number of distinct impressions
-        COUNT(DISTINCT cli.value) AS total_clicks,       -- Count the total number of distinct clicks
+        SUM(DISTINCT imp.value) AS total_impressions,  -- Count the total number of distinct impressions
+        SUM(DISTINCT cli.value) AS total_clicks,       -- Count the total number of distinct clicks
         COUNT(DISTINCT sale.value) AS total_sales         -- Count the total number of distinct sales
     FROM 
         report_impression AS imp                           -- Data source for impressions
@@ -139,4 +139,141 @@ Note:
     WHERE 
         imp.campaign_id = 28353                       -- Filter for the specific campaign ID
         AND YEAR(imp.event_time) = 2024;              -- Filter for the year 2024
+    ```
+
+10. **Question:**:"calculate the revenues of campaign 28334 in Sep 2024"
+    **Output SQL Query:**
+    ```
+    SELECT 
+        SUM(value * venture_currency_rate) AS total_revenue  -- Calculate total revenue for the campaign
+    FROM 
+        report_sale                               -- Data source: report_sale table
+    WHERE 
+        campaign_id = 28334                       -- Filter for the specific campaign ID
+        AND MONTH(event_time) = 9                  -- Filter for September
+        AND YEAR(event_time) = 2024                -- Filter for the year 2024
+        AND is_valid = 1;                           -- Only include valid sales
+    ```
+
+11. **Question:**:"calculate the ads cost of campaign 28334 in Sep 2024"
+    **Output SQL Query:**
+    ```
+    SELECT 
+        SUM(value) AS total_ads_cost  -- Calculate the total cost of the ads
+    FROM 
+        report_cost  -- Data source: report_cost table
+    WHERE 
+        campaign_id = 28334  -- Filter for the specific campaign ID
+        AND YEAR(event_time) = 2024  -- Filter for the year 2024
+        AND MONTH(event_time) = 9;  -- Filter for September
+    ```
+
+12. **Question:**:"get brand and company of campaign 28334"
+    **Output SQL Query:**
+    ```
+    SELECT 
+        brand.name AS brand_name,                      -- Get the name of the brand
+        company.name AS company_name                   -- Get the name of the company
+    FROM 
+        sponsor_campaign AS campaign                    -- Main table containing campaign data
+    INNER JOIN 
+        users_brand AS brand ON campaign.brand_id = brand.id  -- Join with the brand table to get brand details
+    INNER JOIN 
+        users_company AS company ON campaign.supplier_id = company.id  -- Join with the company table to get company details
+    WHERE 
+        campaign.id = 28334;                           -- Filter for the specific campaign ID
+    ```
+
+13. **Question:**:"get all sku of campaign 4649"
+    **Output SQL Query:**
+    ```
+    SELECT 
+        sku.sku,                               -- Select the SKU from sponsor_skuattribute
+        adset.campaign_id                      -- Select the campaign ID from sponsor_adset
+    FROM 
+        sponsor_skuattribute AS sku            -- Table containing SKU attributes
+    INNER JOIN 
+        sponsor_ad AS ad ON sku.ads_id = ad.id  -- Join with sponsor_ad to link SKUs with their ads
+    INNER JOIN 
+        sponsor_adset AS adset ON ad.ads_set_id = adset.id  -- Join with sponsor_adset to get the campaign ID
+    WHERE 
+        adset.campaign_id = 4649;             -- Filter for the specific campaign ID
+    ```
+
+14. **Question:**:"get companies and their spend in Sep 2024"
+    **Output SQL Query:**
+    ```
+    SELECT 
+        company.name AS company_name,                       -- Get the name of the company
+        SUM(costs.value) AS total_spend                     -- Calculate total spend for each company
+    FROM 
+        report_cost AS costs                                  -- Data source: report_cost table
+    INNER JOIN 
+        users_company AS company ON costs.supplier_id = company.id  -- Join with users_company to get company details
+    WHERE 
+        YEAR(costs.event_time) = 2024                        -- Filter for the year 2024
+        AND MONTH(costs.event_time) = 9                      -- Filter for September
+    GROUP BY 
+        company.id;                                          -- Group by company ID to aggregate spending
+    ```
+
+15. **Question:**:"get brands and their spend in Sep 2024"
+    **Output SQL Query:**
+    ```
+    SELECT 
+        brand.name AS brand_name,                        -- Get the name of the brand
+        SUM(costs.value) AS total_spend                  -- Sum of spending for the brand
+    FROM 
+        report_cost AS costs                              -- Data source: report_cost table
+    INNER JOIN 
+        users_brand AS brand ON costs.brand_id = brand.id -- Join with the brand table to get brand details
+    WHERE 
+        MONTH(costs.event_time) = 9                       -- Filter for September
+        AND YEAR(costs.event_time) = 2024                -- Filter for the year 2024
+    GROUP BY 
+        brand.name                                       -- Group by brand name to sum spending per brand
+    ```
+
+16. **Question:**:"Total Companies signed up to the platform in Sep 2024"
+    **Output SQL Query:**
+    ```
+    SELECT 
+        COUNT(*) AS total_companies  -- Count the total number of companies signed up
+    FROM 
+        users_company  -- Data source: users_company table
+    WHERE 
+        DATE_FORMAT(date_created, '%Y-%m') = '2024-09';  -- Filter for companies created in September 2024
+    ```
+
+17. **Question:**:"Get all active brands in the platform in Sep 2024."
+    **Output SQL Query:**
+    ```
+    SELECT 
+        DISTINCT brand.id AS brand_id,          -- Select unique brand IDs
+        brand.name AS brand_name                 -- Get the name of the brand
+    FROM 
+        users_brand AS brand                     -- Main table containing brand information
+    INNER JOIN 
+        report_cost AS cost ON brand.id = cost.brand_id  -- Join with report_cost to filter for brands that have incurred costs
+    WHERE 
+        YEAR(cost.event_time) = 2024 AND         -- Filter for the year 2024
+        MONTH(cost.event_time) = 9;              -- Filter for September
+    ```
+
+18. **Question:**:""
+    **Output SQL Query:**
+    ```
+
+    ```
+
+19. **Question:**:""
+    **Output SQL Query:**
+    ```
+
+    ```
+
+20. **Question:**:""
+    **Output SQL Query:**
+    ```
+
     ```

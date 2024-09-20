@@ -34,6 +34,12 @@ The more sample we have, the more accurate the model is.
 
 When we have most common questions, our system will be able to answer 99% of questions precisely.
 
+## Common relationship about table
+1. Most questions ask about campaign info.
+
+https://mermaid.js.org/intro/
+![alt text](image-1.png)
+
 ## Development cycle:
 
 1. Create tables description:
