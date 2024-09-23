@@ -102,5 +102,19 @@ Here’s an improved version of your chat for clarity, structure, and better rea
    - Unit testing: curated, & generated, LLM
    - A/B testing: production, User
 
+## Sep 20, 2024:
+
+### [The Key Equation Behind Probability](https://www.youtube.com/watch?v=KHVR587oW8I):
+   - Define entropy based on surprise and probability.
+      - The less probable an event is, the higher its surprisal.
+      - When p(x) approaches 1, the surprisal h(x) approaches 0.
+      - When probabilities are multiplied, surprisal is additive (e.g., guessing the right dice outcome 3 times results in 3 times the surprisal).
+      => using log: h(x) = log(1/p(x)): surprise is high for rare events.
+      - entropy = expected value of surprise
+      - cross entropy(P, Q) = expected surprise of practical event P based on belief Q.
+      - Kullback–Leibler (KL) divergence = cross entropy(P, Q) - entropy(P): the distance between 2 distributions
+      
+
+
 ## TODO
 ### [Neural and Non-Neural AI, Reasoning, Transformers, and LSTMs](https://www.youtube.com/watch?v=DP454c1K_vQ&t=68s)
