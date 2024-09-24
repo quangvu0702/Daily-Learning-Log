@@ -116,7 +116,7 @@ Here’s an improved version of your chat for clarity, structure, and better rea
       
 ## Sep 24, 2024:
 
-### [Understanding note-taking | Zettelkasten]](https://www.youtube.com/watch?v=-r6fnC5lVfE):
+### [Understanding note-taking | Zettelkasten](https://www.youtube.com/watch?v=-r6fnC5lVfE):
    - Main idea: Create idea -> id, Create connections ids -> ids
    - Emergent: bottom-up: from note -> connections -> clusters -> structures
    - Dynamic: structure change by adding every note and connections.
@@ -125,6 +125,9 @@ Here’s an improved version of your chat for clarity, structure, and better rea
    - Clarity: Convert idea into paper, write it down in your own words.
    - Invest in the future: process of writing and aggregate knowleadge.
 
+### [How to choose a note-taking app | Zettelkasten | Notion vs Roam vs Obsidian](https://www.youtube.com/watch?v=4MxI68kg8to)
+   - Apply Zettelkasten in the daily live.
+    
 
 ## TODO
 ### [Neural and Non-Neural AI, Reasoning, Transformers, and LSTMs](https://www.youtube.com/watch?v=DP454c1K_vQ&t=68s)
