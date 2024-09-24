@@ -127,7 +127,10 @@ Here’s an improved version of your chat for clarity, structure, and better rea
 
 ### [How to choose a note-taking app | Zettelkasten | Notion vs Roam vs Obsidian](https://www.youtube.com/watch?v=4MxI68kg8to)
    - Apply Zettelkasten in the daily live.
-    
+   - Mindset: try the ideas with any tools. Prevent perfectioness.
+   - Notion, ROAM, Remnote: not suitable for Zettelkasten
+   - Obsidian: free and local.
+
 
 ## TODO
 ### [Neural and Non-Neural AI, Reasoning, Transformers, and LSTMs](https://www.youtube.com/watch?v=DP454c1K_vQ&t=68s)
