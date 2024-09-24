@@ -114,6 +114,16 @@ Here’s an improved version of your chat for clarity, structure, and better rea
       - cross entropy(P, Q) = expected surprise of practical event P based on belief Q.
       - Kullback–Leibler (KL) divergence = cross entropy(P, Q) - entropy(P): the distance between 2 distributions
       
+## Sep 24, 2024:
+
+### [Understanding note-taking | Zettelkasten]](https://www.youtube.com/watch?v=-r6fnC5lVfE):
+   - Main idea: Create idea -> id, Create connections ids -> ids
+   - Emergent: bottom-up: from note -> connections -> clusters -> structures
+   - Dynamic: structure change by adding every note and connections.
+   - Personalized: the way people create create noted and connnections are unique. unique way of thinking.
+   - Inter-thinking: create connection between new ideas with older ideas, put them into giant network. The number of connection growth exponentialy.
+   - Clarity: Convert idea into paper, write it down in your own words.
+   - Invest in the future: process of writing and aggregate knowleadge.
 
 
 ## TODO
