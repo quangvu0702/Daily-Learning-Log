@@ -130,7 +130,20 @@ Here’s an improved version of your chat for clarity, structure, and better rea
    - Mindset: try the ideas with any tools. Prevent perfectioness.
    - Notion, ROAM, Remnote: not suitable for Zettelkasten
    - Obsidian: free and local.
+    
+## Oct 02, 2024:
+### [Automatic Prompt Optimization with “Gradient Descent” and Beam Search](https://arxiv.org/pdf/2305.03495)
+   - Forward:
+      - pred_y = prompt_p(x)
+      - loss{g} = what wrong with pred_y and y. -> error that need to be fix, like opposite direction
+   - Backward
+      - use loss{g} to fix prompt_p
 
+   - Beam seach: 
+      - every step add new prompts to the pool base on the perfomance.
+      - Extend the new prompt from the pool. + paraphrasing new prompts
+      - Select the next pool = It balances exploration (trying new prompts) with exploitation (refining prompts that have already shown promise)
+      - Inital pool  = {inital_prompt}
 
 ## TODO
 ### [Neural and Non-Neural AI, Reasoning, Transformers, and LSTMs](https://www.youtube.com/watch?v=DP454c1K_vQ&t=68s)
