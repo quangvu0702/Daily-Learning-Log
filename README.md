@@ -145,5 +145,10 @@ Here’s an improved version of your chat for clarity, structure, and better rea
       - Select the next pool = It balances exploration (trying new prompts) with exploitation (refining prompts that have already shown promise)
       - Inital pool  = {inital_prompt}
 
+## OCt 09, 2024:
+### [Review OpenAI canvas](https://www.youtube.com/watch?v=Bx7I06w6vVA)
+   - A writing tool with editing options that allows users to request modifications using natural language.
+   - Capable of coding, similar to a code editor like VS Code but without an execution environment.
+
 ## TODO
 ### [Neural and Non-Neural AI, Reasoning, Transformers, and LSTMs](https://www.youtube.com/watch?v=DP454c1K_vQ&t=68s)
